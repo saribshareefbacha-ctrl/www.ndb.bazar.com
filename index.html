@@ -3,173 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nankana Digital Bazaar (NDB) — Functional 3D Marketplace</title>
-  <meta name="description" content="Architectural 3D Virtual Marketplace for Nankana Digital Bazaar (NDB) by SwiftStack. GitHub Pages Ready.">
+  <title>Nankana Digital Bazaar (NDB) — Unified Security & 3D Marketplace</title>
+  <meta name="description" content="Architectural 3D Virtual Marketplace for Nankana Digital Bazaar (NDB) by SwiftStack. Unified Auth & RBAC Ready.">
 
-  <!-- Favicon placeholder using relative inline SVG data URI to prevent 404 -->
+  <!-- Favicon placeholder -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏪</text></svg>">
 
-  <!-- Google Fonts via CDN -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome Icons via CDN -->
+  <!-- Font Awesome & Tailwind -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            ndb: {
-              bg: '#0a0e17',
-              surface: '#0f172a',
-              card: 'rgba(15, 23, 42, 0.82)',
-              border: 'rgba(56, 189, 248, 0.22)',
-              cyan: '#00e5ff',
-              blue: '#2563eb',
-              violet: '#7c3aed',
-              amber: '#f59e0b',
-              emerald: '#10b981',
-              rose: '#f43f5e'
-            }
-          },
-          fontFamily: {
-            sans: ['Outfit', 'system-ui', 'sans-serif'],
-            mono: ['Space Grotesk', 'monospace']
-          }
-        }
-      }
+      theme: { extend: { colors: { ndb: { bg: '#0a0e17', surface: '#0f172a', card: 'rgba(15, 23, 42, 0.82)', border: 'rgba(56, 189, 248, 0.22)', cyan: '#00e5ff', blue: '#2563eb', violet: '#7c3aed', amber: '#f59e0b', emerald: '#10b981', rose: '#f43f5e' } }, fontFamily: { sans: ['Outfit', 'system-ui', 'sans-serif'], mono: ['Space Grotesk', 'monospace'] } } }
     }
   </script>
 
-  <!-- Three.js r128 via CDN -->
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Three.js, OrbitControls, GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- OrbitControls addon via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  <!-- GSAP 3 via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0a0e17;
-      font-family: 'Outfit', sans-serif;
-      color: #f1f5f9;
-      overflow: hidden;
-    }
-    canvas#webgl-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      outline: none;
-      display: block;
-    }
-    .glass-card {
-      background: rgba(15, 23, 42, 0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
-    }
-    .glass-card-glow {
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(0, 229, 255, 0.35);
-      box-shadow: 0 0 35px rgba(0, 229, 255, 0.15), 0 16px 48px rgba(0, 0, 0, 0.65);
-    }
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: rgba(10, 14, 23, 0.6);
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: rgba(56, 189, 248, 0.35);
-      border-radius: 9999px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 229, 255, 0.75);
-    }
-    .sign-shimmer {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-      animation: shimmer 4s infinite linear;
-    }
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(200%); }
-    }
+  <!-- Firebase SDKs (v9 Compat CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 
-    /* ---- Glassmorphism Modal ---- */
-    #stall-modal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      padding: 1rem;
-      background: rgba(5, 8, 20, 0.72);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.28s ease;
-    }
-    #stall-modal.modal-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    #stall-modal-card {
-      position: relative;
-      width: 100%;
-      max-width: 520px;
-      max-height: 90dvh;
-      display: flex;
-      flex-direction: column;
-      background: rgba(10, 16, 32, 0.90);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
-      border: 1px solid rgba(0, 229, 255, 0.28);
-      border-radius: 1.5rem;
-      box-shadow: 0 0 60px rgba(0, 229, 255, 0.10), 0 24px 64px rgba(0,0,0,0.75);
-      transform: scale(0.93) translateY(16px);
-      transition: transform 0.30s cubic-bezier(0.34, 1.52, 0.64, 1), opacity 0.28s ease;
-      opacity: 0;
-      overflow: hidden;
-    }
-    #stall-modal.modal-open #stall-modal-card {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-    .modal-accent-bar {
-      height: 3px;
-      width: 100%;
-      background: linear-gradient(90deg, #00e5ff 0%, #2563eb 60%, transparent 100%);
-    }
-  </style>
 </head>
 <body class="h-full w-full overflow-hidden select-none">
 
-  <!-- ========================================== -->
-  <!-- 1. 3D WEBGL VIEWPORT LAYER                 -->
-  <!-- ========================================== -->
-  <div id="canvas-container" class="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0a0e17] transition-opacity duration-500">
-    <canvas id="webgl-canvas"></canvas>
+  <!-- 1. UNIFIED AUTH MODAL (Hidden on Initial Load) -->
+  <div id="auth-modal">
+    <div id="auth-card">
+      <div class="text-center mb-6">
+        <div class="auth-brand-mark">
+          <i class="fa-solid fa-shop text-black"></i>
+        </div>
+        <h1 class="text-xl font-semibold text-slate-100 tracking-tight">Nankana Digital Bazaar</h1>
+        <p class="text-slate-400 text-xs tracking-widest mt-1">Unified Security Interface</p>
+      </div>
+      
+      <!-- Unified Tab Switching -->
+      <div class="auth-tabs">
+        <div id="tab-login" class="auth-tab active">Sign In</div>
+        <div id="tab-signup" class="auth-tab">Sign Up</div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Login View -->
+        <div id="view-login" class="auth-view active">
+          <input type="email" id="auth-email" class="auth-input" placeholder="Corporate/Personal Email">
+          <input type="password" id="auth-password" class="auth-input" placeholder="Secure Password">
+          <button id="btn-login-standard" class="btn-primary">
+            <i class="fa-solid fa-key text-xs"></i> Sign In (Standard)
+          </button>
+        </div>
+
+        <!-- Signup View -->
+        <div id="view-signup" class="auth-view">
+          <input type="email" id="signup-email" class="auth-input" placeholder="New Corporate/Personal Email">
+          <input type="password" id="signup-password" class="auth-input" placeholder="Create Secure Password">
+          <button id="btn-signup-standard" class="btn-signup">
+            <i class="fa-solid fa-user-plus text-xs"></i> Sign Up (New Account)
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-divider"><span>Direct Access</span></div>
+
+      <!-- Genuine Branding & Refined Copywriting -->
+      <button id="btn-login-google" class="btn-google">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <div id="auth-status" class="text-center">System Ready • Waiting for Authentication</div>
+    </div>
+  </div>
+
+  <!-- 2. OWNER PANEL (Master Authority) -->
+  <div id="owner-panel">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-extrabold text-white font-mono tracking-tight">Master Owner Authority</h2>
+          <p class="text-cyan-400 text-xs font-mono mt-1">Global Governance & System Parameters</p>
+        </div>
+        <button id="btn-close-owner" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-mono border border-white/10 transition-all">Close Panel</button>
+      </div>
+
+      <!-- Global Controls Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Shop Master Toggle -->
+        <div class="glass-card-glow p-6 rounded-2xl border border-cyan-400/30">
+          <h3 class="text-lg font-bold text-white font-mono mb-4">Global Shop Master</h3>
+          <p class="text-xs text-slate-400 font-mono mb-6">Instantly toggle ALL stalls online/offline across the platform.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-slate-300 uppercase">Master Status</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type='checkbox' id='owner-master-toggle' class='sr-only peer' checked>
+              <div class='w-12 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-cyan-500'></div>
+            </label>
+          </div>
+          <button id="btn-sync-global" class="w-full mt-6 py-2 rounded-xl bg-cyan-500 text-black font-bold text-xs uppercase tracking-wider transition-all hover:bg-cyan-400">Sync to All Stalls</button>
+        </div>
+
+        <!-- Role Management -->
+        <div class="glass-card-glow p-6 rounded-2xl border border-cyan-400/30 md:col-span-2">
+          <h3 class="text-lg font-bold text-white font-mono mb-4">Role Hierarchy & Assignment</h3>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-white/5">
+              <div>
+                <span class="text-xs font-mono text-white font-bold block">Admin Oversight</span>
+                <span class="text-[10px] text-slate-400 font-mono">Bilal Munawar & Areeba Munawar</span>
+              </div>
+              <button class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 text-[10px] font-mono border border-cyan-400/30 transition-all">Manage</button>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-white/5">
+              <div>
+                <span class="text-xs font-mono text-white font-bold block">Maintenance Team</span>
+                <span class="text-[10px] text-slate-400 font-mono">Server Health & GitHub Build States</span>
+              </div>
+              <button class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 text-[10px] font-mono border border-emerald-400/30 transition-all">Audit</button>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-white/5">
+              <div>
+                <span class="text-xs font-mono text-white font-bold block">Merchant Registry</span>
+                <span class="text-[10px] text-slate-400 font-mono">Shopkeeper & Staff Provisioning</span>
+              </div>
+              <button class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 text-[10px] font-mono border border-amber-400/30 transition-all">Provision</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 3D WEBGL VIEWPORT -->
+  <div id="canvas-container" class="absolute inset-0 w-full h-full z-0 overflow-hidden bg-[#0a0e17] transition-opacity duration-500 pointer-events-auto">
+    <canvas id="webgl-canvas" class="w-full h-full block"></canvas>
   </div>
 
   <!-- Realtime 3D Object Hover Tooltip HUD -->
@@ -180,1854 +161,82 @@
         <div id="hud-title" class="font-bold text-xs uppercase tracking-wider text-white">Pavilion</div>
         <div id="hud-category" class="text-[10px] text-cyan-300 font-mono">Category • Online</div>
       </div>
-      <div class="pl-2 border-l border-white/10 text-cyan-400 text-xs">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-      </div>
+      <div class="pl-2 border-l border-white/10 text-cyan-400 text-xs"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 2. UI HEADS-UP DISPLAY (HUD) OVERLAY       -->
-  <!-- ========================================== -->
+  <!-- 4. UI OVERLAY -->
   <div id="ui-overlay" class="relative z-10 w-full h-full pointer-events-none flex flex-col justify-between p-3 sm:p-5 md:p-6">
-    
-    <!-- Top Navigation Bar (Simplified & Clean) -->
     <header class="w-full flex flex-col md:flex-row items-center justify-between gap-3 pointer-events-auto">
-      
-      <!-- Clean Brand Identity -->
-      <a href="#/" class="glass-card rounded-2xl px-5 py-2.5 flex items-center space-x-3 border border-white/10 hover:border-cyan-400/30 transition-all group w-full md:w-auto">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-base shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-shop"></i>
-        </div>
+      <a href="#" class="glass-card rounded-2xl px-5 py-2.5 flex items-center space-x-3 border border-white/10 hover:border-cyan-400/30 transition-all group w-full md:w-auto">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-base shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform"><i class="fa-solid fa-shop"></i></div>
         <span class="text-sm sm:text-base font-extrabold tracking-wide text-white font-mono uppercase">Nankana Digital Bazaar</span>
       </a>
-
-      <!-- Essential Site Search & Clean Category Filters -->
-      <div class="glass-card rounded-2xl px-3 py-2 flex items-center space-x-2 border border-white/10 w-full md:w-auto max-w-2xl overflow-x-auto custom-scroll">
-        <!-- Search Input -->
-        <div class="relative flex-shrink-0 w-36 sm:w-48">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-          <input type="text" id="global-search" placeholder="Search pavilions..." 
-            class="w-full bg-slate-900/90 border border-slate-700/60 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors">
+      
+      <!-- Clean Navbar Action -->
+      <div class="flex items-center gap-3 pointer-events-auto">
+        <div class="glass-card rounded-2xl px-3 py-2 flex items-center space-x-2 border border-white/10 w-full md:w-auto max-w-xl overflow-x-auto custom-scroll">
+          <div class="relative flex-shrink-0 w-36 sm:w-48"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="text" id="global-search" placeholder="Search pavilions..." class="w-full bg-slate-900/90 border border-slate-700/60 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors"></div>
+          <div class="flex items-center space-x-1.5 flex-nowrap" id="category-pills">
+            <button data-cat="all" class="cat-pill active px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all bg-cyan-500 text-black shadow-md shadow-cyan-500/25 whitespace-nowrap">All Stalls</button>
+            <button data-cat="Electronics" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Tech</button>
+            <button data-cat="Fashion" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Fashion</button>
+            <button data-cat="Organic" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Organic</button>
+            <button data-cat="Handicrafts" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Crafts</button>
+            <button data-cat="Cyber AI" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Services</button>
+          </div>
         </div>
-
-        <!-- Clean Category Filters -->
-        <div class="flex items-center space-x-1.5 flex-nowrap" id="category-pills">
-          <button data-cat="all" class="cat-pill active px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all bg-cyan-500 text-black shadow-md shadow-cyan-500/25 whitespace-nowrap">All Stalls</button>
-          <button data-cat="Electronics" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Tech</button>
-          <button data-cat="Fashion" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Fashion</button>
-          <button data-cat="Organic" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Organic</button>
-          <button data-cat="Handicrafts" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Crafts</button>
-          <button data-cat="Cyber AI" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Services</button>
-        </div>
+        <!-- Clean Navbar Action Button -->
+        <button id="btn-open-auth" class="px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-white text-xs font-mono border border-white/10 transition-all flex items-center gap-2">
+          <i class="fa-solid fa-user"></i> Get Started
+        </button>
       </div>
+      
     </header>
-
-    <!-- Ultra-Clean Minimalistic Footer -->
     <footer class="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 pointer-events-auto">
-      <div class="text-xs text-slate-400 flex items-center space-x-2 glass-card px-4 py-2 rounded-xl border border-white/5">
-        <span class="text-slate-200 font-medium font-sans">Nankana Digital Bazaar</span>
-        <span class="text-slate-600">•</span>
-        <span class="text-slate-400">Virtual Commercial Pavilions</span>
-      </div>
-
-      <!-- Quick Pavilion Selector -->
-      <div class="glass-card rounded-xl p-1.5 border border-white/5 flex items-center space-x-1.5 overflow-x-auto max-w-full sm:max-w-xl custom-scroll" id="quick-jump-bar">
-        <!-- Dynamically populated via JS -->
-      </div>
+      <div class="text-xs text-slate-400 flex items-center space-x-2 glass-card px-4 py-2 rounded-xl border border-white/5"><span class="text-slate-200 font-medium font-sans">Nankana Digital Bazaar</span><span class="text-slate-600">•</span><span class="text-slate-400">Virtual Commercial Pavilions</span></div>
+      <div class="glass-card rounded-xl p-1.5 border border-white/5 flex items-center space-x-1.5 overflow-x-auto max-w-full sm:max-w-xl custom-scroll" id="quick-jump-bar"></div>
     </footer>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 3. CENTRED GLASSMORPHISM STALL MODAL       -->
-  <!-- ========================================== -->
+  <!-- 5. STALL MODAL -->
   <div id="stall-modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
     <div id="stall-modal-card">
       <div class="modal-accent-bar"></div>
       <div class="flex items-start justify-between px-6 pt-5 pb-4">
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-            <span id="modal-cat" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">Category</span>
-            <span id="modal-status-pill" class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="modal-status-text">Store Open</span>
-            </span>
-          </div>
+          <div class="flex items-center gap-2 mb-1.5 flex-wrap"><span id="modal-cat" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">Category</span><span id="modal-status-pill" class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span id="modal-status-text">Store Open</span></span></div>
           <h2 id="modal-name" class="text-xl font-extrabold text-white font-mono tracking-tight truncate leading-tight">Pavilion Name</h2>
           <p id="modal-merchant" class="text-xs text-slate-400 mt-0.5">Merchant: <span class="text-cyan-300 font-medium">Partner</span></p>
         </div>
-        <button id="btn-close-modal" class="ml-3 flex-shrink-0 w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all border border-white/5" aria-label="Close">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <button id="btn-close-modal" class="ml-3 flex-shrink-0 w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all border border-white/5" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="px-6 pb-3">
-        <p id="modal-desc" class="text-sm text-slate-300 leading-relaxed line-clamp-2"></p>
-      </div>
+      <div class="px-6 pb-3"><p id="modal-desc" class="text-sm text-slate-300 leading-relaxed line-clamp-2"></p></div>
       <div class="mx-6 mb-4 grid grid-cols-3 gap-2">
-        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center">
-          <div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Visitors</div>
-          <div class="text-sm font-bold text-white font-mono" id="modal-traffic">&#8212;</div>
-        </div>
-        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center">
-          <div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Rating</div>
-          <div class="text-sm font-bold text-amber-300 font-mono flex items-center justify-center gap-1"><i class="fa-solid fa-star text-[10px]"></i><span id="modal-rating">&#8212;</span></div>
-        </div>
-        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center">
-          <div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Delivery</div>
-          <div class="text-sm font-bold text-emerald-400 font-mono">~15 min</div>
-        </div>
+        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center"><div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Visitors</div><div class="text-sm font-bold text-white font-mono" id="modal-traffic">&#8212;</div></div>
+        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center"><div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Rating</div><div class="text-sm font-bold text-amber-300 font-mono flex items-center justify-center gap-1"><i class="fa-solid fa-star text-[10px]"></i><span id="modal-rating">&#8212;</span></div></div>
+        <div class="bg-slate-900/70 p-2.5 rounded-xl border border-white/5 text-center"><div class="text-[9px] text-slate-500 uppercase font-mono mb-0.5">Delivery</div><div class="text-sm font-bold text-emerald-400 font-mono">~15 min</div></div>
       </div>
-      <div class="mx-6 mb-4 flex items-center justify-between bg-slate-900/60 rounded-2xl px-4 py-3 border border-white/5">
-        <span class="text-xs font-mono text-slate-300 uppercase tracking-wide">Storefront Status</span>
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type='checkbox' id='modal-state-toggle' class='sr-only peer' checked>
-          <div class='w-10 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[\x27\x27] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500'></div>
-        </label>
-      </div>
-      <div class="flex-1 overflow-y-auto custom-scroll px-6 pb-2">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-[10px] uppercase font-mono text-slate-500 tracking-wider">Featured Offerings</span>
-          <span id="modal-item-count" class="text-[10px] font-mono text-cyan-400"></span>
-        </div>
-        <div id="modal-items" class="space-y-1.5"></div>
-      </div>
-      <div class="mx-6 py-4 border-t border-white/10 flex items-center gap-3 mt-2">
-        <button id="btn-modal-share" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
-          <i class="fa-solid fa-link"></i>
-          <span>Copy Link</span>
-        </button>
-        <button id="btn-close-modal-footer" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-all border border-white/10">
-          Close
-        </button>
-      </div>
+      <div class="mx-6 mb-4 flex items-center justify-between bg-slate-900/60 rounded-2xl px-4 py-3 border border-white/5"><span class="text-xs font-mono text-slate-300 uppercase tracking-wide">Storefront Status</span><label class="relative inline-flex items-center cursor-pointer"><input type='checkbox' id='modal-state-toggle' class='sr-only peer' checked><div class='w-10 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500'></div></label></div>
+      <div class="flex-1 overflow-y-auto custom-scroll px-6 pb-2"><div class="flex items-center justify-between mb-2"><span class="text-[10px] uppercase font-mono text-slate-500 tracking-wider">Featured Offerings</span><span id="modal-item-count" class="text-[10px] font-mono text-cyan-400"></span></div><div id="modal-items" class="space-y-1.5"></div></div>
+      <div class="mx-6 py-4 border-t border-white/10 flex items-center gap-3 mt-2"><button id="btn-modal-share" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"><i class="fa-solid fa-link"></i><span>Copy Link</span></button><button id="btn-close-modal-footer" class="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-all border border-white/10">Close</button></div>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 4. 2D FALLBACK & RESPONSIVE CATALOG GRID   -->
-  <!-- ========================================== -->
+  <!-- 6. 2D FALLBACK -->
   <main id="fallback-2d-container" class="fixed inset-0 z-20 bg-[#0a0e17] overflow-y-auto hidden p-4 sm:p-8 md:p-12 custom-scroll">
     <div class="max-w-7xl mx-auto space-y-6 pt-16 md:pt-4">
-      
-      <!-- Diagnostic Alert Banner for Context-Loss / WebGL-Disabled -->
-      <div id="fallback-reason-banner" class="hidden p-4 rounded-2xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs flex items-center justify-between gap-4">
-        <div class="flex items-center space-x-3">
-          <i class="fa-solid fa-triangle-exclamation text-lg text-amber-400 flex-shrink-0"></i>
-          <div>
-            <span class="font-bold uppercase tracking-wider font-mono">2D High-Performance Fallback Mode:</span>
-            <span id="fallback-reason-text"> WebGL context unavailable or disabled. The complete marketplace catalog is fully accessible in 2D mode.</span>
-          </div>
-        </div>
-        <button id="btn-try-recovering-webgl" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs uppercase font-mono transition-colors">
-          Retry WebGL
-        </button>
-      </div>
-
-      <!-- Catalog Header & SwiftStack Badge -->
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
-        <div>
-          <div class="flex items-center space-x-3">
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-mono uppercase tracking-wide">Digital Bazaar Directory</h2>
-            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-mono border border-cyan-500/30">2D Grid</span>
-          </div>
-          <p class="text-slate-400 text-xs sm:text-sm mt-1">
-            Nankana Digital Bazaar (NDB) certified merchant directory and physical stall storefronts.
-          </p>
-        </div>
-        <button id="btn-switch-to-3d" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center space-x-2 shadow-lg shadow-cyan-500/25">
-          <i class="fa-solid fa-cube"></i>
-          <span>Launch 3D View</span>
-        </button>
-      </div>
-
-      <!-- Catalog Filter Pills in 2D -->
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-1.5" id="catalog-2d-filters">
-          <!-- Populated via JS -->
-        </div>
-        <div class="text-xs text-slate-400 font-mono" id="catalog-2d-counter">Showing 8 of 8 Pavilions</div>
-      </div>
-
-      <!-- Stalls Responsive Grid -->
-      <div id="catalog-2d-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        <!-- Rendered dynamically -->
-      </div>
+      <div id="fallback-reason-banner" class="hidden p-4 rounded-2xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs flex items-center justify-between gap-4"><div class="flex items-center space-x-3"><i class="fa-solid fa-triangle-exclamation text-lg text-amber-400 flex-shrink-0"></i><div><span class="font-bold uppercase tracking-wider font-mono">2D High-Performance Fallback Mode:</span><span id="fallback-reason-text"> WebGL context unavailable or disabled.</span></div></div><button id="btn-try-recovering-webgl" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs uppercase font-mono transition-colors">Retry WebGL</button></div>
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6"><div class="flex items-center space-x-3"><h2 class="text-2xl sm:text-3xl font-extrabold text-white font-mono uppercase tracking-wide">Digital Bazaar Directory</h2><span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-mono border border-cyan-500/30">2D Grid</span></div><p class="text-slate-400 text-xs sm:text-sm mt-1">Nankana Digital Bazaar (NDB) certified merchant directory.</p><button id="btn-switch-to-3d" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center space-x-2 shadow-lg shadow-cyan-500/25"><i class="fa-solid fa-cube"></i><span>Launch 3D View</span></button></div>
+      <div class="flex flex-wrap items-center justify-between gap-3"><div class="flex flex-wrap items-center gap-1.5" id="catalog-2d-filters"></div><div class="text-xs text-slate-400 font-mono" id="catalog-2d-counter">Showing 8 of 8 Pavilions</div></div>
+      <div id="catalog-2d-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
     </div>
   </main>
 
-  <!-- Toast Notification Stack -->
+  <!-- Toast Deck -->
   <div id="toast-deck" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none"></div>
 
-  <!-- ========================================== -->
-  <!-- 6. APPLICATION ARCHITECTURE SCRIPT         -->
-  <!-- ========================================== -->
-  <script>
-    /**
-     * NANKANA DIGITAL BAZAAR (NDB) BY SWIFTSTACK
-     * Master Data Schema for Digital Pavilions
-     */
-    const NDB_STALLS = [
-      {
-        id: 'stall-1',
-        name: 'Quantum Tech Pavilion',
-        signTitle: 'QUANTUM TECH',
-        category: 'Electronics',
-        merchant: 'Al-Khawarizmi Systems',
-        rating: 4.95,
-        status: 'online',
-        color: 0x00e5ff,
-        accent: '#00e5ff',
-        traffic: '24.1K',
-        coords: { x: -25, z: -11 },
-        rotY: Math.PI * 0.15,
-        description: 'Next-generation computing hardware, quantum microprocessors, holographic monitors, and neural interface terminals.',
-        items: [
-          { name: 'Quantum Core Q-8', price: '1.25 ETH', tag: 'Hot' },
-          { name: 'HoloLens Retinal Pro', price: '0.80 ETH', tag: 'New' },
-          { name: 'Neural Link Terminal', price: '0.45 ETH', tag: 'Limited' }
-        ]
-      },
-      {
-        id: 'stall-2',
-        name: 'Cyber Silk & Wearables',
-        signTitle: 'NOOR APPAREL',
-        category: 'Fashion',
-        merchant: 'Noor Smart Apparel',
-        rating: 4.88,
-        status: 'online',
-        color: 0xec4899,
-        accent: '#ec4899',
-        traffic: '19.4K',
-        coords: { x: -13, z: -25 },
-        rotY: Math.PI * 0.35,
-        description: 'Adaptive smart-textile garments woven with programmable photonic filaments and micro-thermal climate regulators.',
-        items: [
-          { name: 'Photonic Silk Kurta', price: '0.30 ETH', tag: 'Featured' },
-          { name: 'Chroma Light Cloak', price: '0.50 ETH', tag: 'Trending' },
-          { name: 'Haptic Smart Gloves', price: '0.15 ETH', tag: 'Sale' }
-        ]
-      },
-      {
-        id: 'stall-3',
-        name: 'Nankana Organic Flora',
-        signTitle: 'NANKANA FLORA',
-        category: 'Organic',
-        merchant: 'Punjab AgriBio Cooperative',
-        rating: 4.94,
-        status: 'online',
-        color: 0x10b981,
-        accent: '#10b981',
-        traffic: '16.8K',
-        coords: { x: 13, z: -25 },
-        rotY: -Math.PI * 0.35,
-        description: 'Authentic organic Kashmiri saffron, pure bio-honey, and hydroponic medicinal herbal extracts grown in solar biomes.',
-        items: [
-          { name: 'Pure Solar Saffron (10g)', price: '0.18 ETH', tag: 'Certified' },
-          { name: 'Bio-Flora Honey Essence', price: '0.08 ETH', tag: 'Organic' },
-          { name: 'Herbal Elixir Concentrate', price: '0.12 ETH', tag: 'Pure' }
-        ]
-      },
-      {
-        id: 'stall-4',
-        name: 'Heritage Craft Guild',
-        signTitle: 'WAZIRABAD CRAFT',
-        category: 'Handicrafts',
-        merchant: 'Wazirabad Bladesmiths',
-        rating: 4.98,
-        status: 'online',
-        color: 0xf59e0b,
-        accent: '#f59e0b',
-        traffic: '22.0K',
-        coords: { x: 25, z: -11 },
-        rotY: -Math.PI * 0.15,
-        description: 'Hand-forged Damascus steel folding blades, brass filigree candle lamps, and NFC-authenticated ceramic pottery.',
-        items: [
-          { name: 'Damascus Laser Carver', price: '0.65 ETH', tag: 'Masterwork' },
-          { name: 'Filigree Brass Chandelier', price: '0.35 ETH', tag: 'Artisan' },
-          { name: 'NFC Glazed Terracotta Urn', price: '0.20 ETH', tag: 'Historic' }
-        ]
-      },
-      {
-        id: 'stall-5',
-        name: 'Neural Cloud & AI Kiosk',
-        signTitle: 'INDUS CLOUD AI',
-        category: 'Cyber AI',
-        merchant: 'Indus Data Foundry',
-        rating: 4.86,
-        status: 'online',
-        color: 0x8b5cf6,
-        accent: '#8b5cf6',
-        traffic: '31.2K',
-        coords: { x: 25, z: 12 },
-        rotY: -Math.PI * 0.85,
-        description: 'Specialized LLM inference nodes, decentralized smart-contract security suites, and cold cryptostorage solutions.',
-        items: [
-          { name: 'Dedicated Agent Pod', price: '1.80 ETH/mo', tag: 'Enterprise' },
-          { name: 'Zero-Knowledge Vault', price: '0.40 ETH', tag: 'High-Sec' },
-          { name: 'Audit Protocol v4', price: '0.90 ETH', tag: 'Verified' }
-        ]
-      },
-      {
-        id: 'stall-6',
-        name: 'Karak Chai & Robo-Dhabba',
-        signTitle: 'KARAK CHAI CAFE',
-        category: 'Cyber AI',
-        merchant: 'Nankana Street Labs',
-        rating: 4.97,
-        status: 'online',
-        color: 0xf97316,
-        accent: '#f97316',
-        traffic: '42.6K',
-        coords: { x: 13, z: 25 },
-        rotY: -Math.PI * 0.65,
-        description: 'Robotic precision-steeped Karak tea, cardamom nitro beverages, and molecular street refreshments.',
-        items: [
-          { name: 'Cardamom Nitro Chai', price: '0.01 ETH', tag: 'Best Seller' },
-          { name: 'Molecular Street Samosa', price: '0.03 ETH', tag: 'Crispy' },
-          { name: 'Saffron Lassi Brew', price: '0.02 ETH', tag: 'Chilled' }
-        ]
-      },
-      {
-        id: 'stall-7',
-        name: 'Holowear Visual Studio',
-        signTitle: 'MIRAGE OPTICS',
-        category: 'Electronics',
-        merchant: 'Mirage Optics Ltd.',
-        rating: 4.79,
-        status: 'offline', // Closed/Offline store with dimmed signage
-        color: 0x3b82f6,
-        accent: '#3b82f6',
-        traffic: '11.4K',
-        coords: { x: -13, z: 25 },
-        rotY: Math.PI * 0.65,
-        description: 'Micro-projector contact lenses, volumetric display kiosks, and retinal glare-shield eyewear.',
-        items: [
-          { name: 'Retinal AR Contact Lens', price: '0.95 ETH', tag: 'Wireless' },
-          { name: 'Holo-Cube Desk Projector', price: '0.48 ETH', tag: '4K Volumetric' },
-          { name: 'Glare Shield Visor', price: '0.14 ETH', tag: 'Durable' }
-        ]
-      },
-      {
-        id: 'stall-8',
-        name: 'Aero Logistics Drone Port',
-        signTitle: 'RAVI EXPRESS',
-        category: 'Cyber AI',
-        merchant: 'Ravi Express Skyways',
-        rating: 4.91,
-        status: 'online',
-        color: 0x14b8a6,
-        accent: '#14b8a6',
-        traffic: '28.7K',
-        coords: { x: -25, z: 12 },
-        rotY: -Math.PI * 0.85,
-        description: 'Point-to-point automated courier dispatch and cargo transit servicing all bazaar sectors in under 8 minutes.',
-        items: [
-          { name: 'Express Skyway Dispatch', price: '0.04 ETH', tag: 'Rapid' },
-          { name: 'Cargo Drone Rental', price: '0.45 ETH/day', tag: 'Payload' },
-          { name: 'Air-Beacon Transponder', price: '0.18 ETH', tag: 'IoT' }
-        ]
-      }
-    ];
-
-    /**
-     * Procedural Texture Generators
-     * Generates crisp, realistic textures via HTML5 Canvas (zero external assets, 0% 404 risk)
-     */
-    class TextureFactory {
-      static createPlazaPavers() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext('2d');
-
-        // Paved granite base
-        ctx.fillStyle = '#111726';
-        ctx.fillRect(0, 0, 512, 512);
-
-        // Stone Paver Grid
-        ctx.strokeStyle = '#1b2336';
-        ctx.lineWidth = 4;
-        const tileSize = 64;
-
-        for (let x = 0; x < 512; x += tileSize) {
-          for (let y = 0; y < 512; y += tileSize) {
-            // Subtle random stone shading
-            const tone = 18 + Math.floor(Math.random() * 8);
-            ctx.fillStyle = `rgb(${tone}, ${tone + 4}, ${tone + 12})`;
-            ctx.fillRect(x + 2, y + 2, tileSize - 4, tileSize - 4);
-            ctx.strokeRect(x, y, tileSize, tileSize);
-          }
-        }
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(16, 16);
-        return texture;
-      }
-
-      static createSignboard(name, category, colorHex, merchant) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1024;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d');
-
-        // Dark matte fascia backing with subtle architectural gradient
-        const bgGrad = ctx.createLinearGradient(0, 0, 1024, 0);
-        bgGrad.addColorStop(0, '#060a12');
-        bgGrad.addColorStop(0.5, '#0c1322');
-        bgGrad.addColorStop(1, '#060a12');
-        ctx.fillStyle = bgGrad;
-        ctx.fillRect(0, 0, 1024, 256);
-
-        // Luminous illuminated border
-        ctx.strokeStyle = colorHex;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(8, 8, 1008, 240);
-
-        // Category Tag Pill
-        ctx.fillStyle = colorHex;
-        ctx.fillRect(40, 24, 210, 40);
-
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 22px "Space Grotesk", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(category.toUpperCase(), 145, 52);
-
-        // Storefront Name in Bold Clean Typography
-        ctx.textAlign = 'left';
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 74px "Outfit", sans-serif';
-        ctx.shadowColor = colorHex;
-        ctx.shadowBlur = 16;
-        ctx.fillText(name, 40, 150);
-        ctx.shadowBlur = 0;
-
-        // Verified Merchant Subtitle
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '500 24px "Space Grotesk", sans-serif';
-        ctx.fillText(`MERCHANT: ${merchant.toUpperCase()} • NANKANA BAZAAR`, 42, 212);
-
-        // Active Sign Indicator Dot
-        ctx.fillStyle = '#10b981';
-        ctx.beginPath();
-        ctx.arc(970, 48, 12, 0, Math.PI * 2);
-        ctx.fill();
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.needsUpdate = true;
-        return texture;
-      }
-
-      static createBladeSign(title, colorHex) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = '#080c14';
-        ctx.fillRect(0, 0, 256, 256);
-
-        ctx.strokeStyle = colorHex;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(10, 10, 236, 236);
-
-        ctx.fillStyle = colorHex;
-        ctx.font = 'bold 68px "Space Grotesk", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        const monogram = title.split(' ').map(w => w[0]).join('').slice(0, 3);
-        ctx.fillText(monogram, 128, 115);
-
-        ctx.fillStyle = '#cbd5e1';
-        ctx.font = 'bold 22px "Outfit", sans-serif';
-        ctx.fillText('STORE', 128, 185);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.needsUpdate = true;
-        return texture;
-      }
-
-      static createFacadeTexture(colorHex) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = '#121927';
-        ctx.fillRect(0, 0, 512, 512);
-
-        // Architectural composite paneling seams
-        ctx.strokeStyle = '#080c14';
-        ctx.lineWidth = 6;
-        const rowHeight = 64;
-
-        for (let y = 0; y < 512; y += rowHeight) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(512, y);
-          ctx.stroke();
-
-          const offset = (y / rowHeight) % 2 === 0 ? 0 : 128;
-          for (let x = offset; x < 512; x += 256) {
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, y + rowHeight);
-            ctx.stroke();
-
-            // Metallic rivet accents
-            ctx.fillStyle = '#223046';
-            ctx.fillRect(x + 6, y + 6, 4, 4);
-            ctx.fillRect(x + 246, y + 6, 4, 4);
-          }
-        }
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(2, 2);
-        return texture;
-      }
-
-      static createWoodSlats() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = '#181f2f';
-        ctx.fillRect(0, 0, 256, 256);
-
-        ctx.fillStyle = '#101624';
-        for (let y = 0; y < 256; y += 16) {
-          ctx.fillRect(0, y, 256, 3);
-        }
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(2, 2);
-        return texture;
-      }
-    }
-
-    /**
-     * Web Audio API Synthesizer (No external sound file dependencies)
-     */
-    class AudioSynth {
-      constructor() {
-        this.enabled = true;
-        this.ctx = null;
-      }
-      ensureContext() {
-        if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
-          const AudioCtor = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioCtor();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      }
-      playPip() {
-        if (!this.enabled) return;
-        this.ensureContext();
-        if (!this.ctx) return;
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(500, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(750, this.ctx.currentTime + 0.05);
-          gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + 0.05);
-        } catch (e) {}
-      }
-      playFocus() {
-        if (!this.enabled) return;
-        this.ensureContext();
-        if (!this.ctx) return;
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(320, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(780, this.ctx.currentTime + 0.12);
-          gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + 0.12);
-        } catch (e) {}
-      }
-      playToggle() {
-        if (!this.enabled) return;
-        this.ensureContext();
-        if (!this.ctx) return;
-        try {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(620, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.1);
-          gain.gain.setValueAtTime(0.035, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start();
-          osc.stop(this.ctx.currentTime + 0.1);
-        } catch (e) {}
-      }
-    }
-
-    /**
-     * CORE APPLICATION ARCHITECTURE: Application3D
-     * Restricts 3D rendering strictly to realistic architectural pavilion market structures.
-     */
-    class Application3D {
-      constructor() {
-        this.container = document.getElementById('canvas-container');
-        this.canvas = document.getElementById('webgl-canvas');
-        this.fallbackContainer = document.getElementById('fallback-2d-container');
-        this.audio = new AudioSynth();
-
-        // 3D Engine State
-        this.renderer = null;
-        this.scene = null;
-        this.camera = null;
-        this.controls = null;
-        this.clock = new THREE.Clock();
-        this.isWebGLRunning = false;
-        this.isDaylight = false;
-        this.animationFrameId = null;
-
-        // Interactive Registry
-        this.stallsMap = new Map();
-        this.hitMeshes = [];
-        this.raycaster = new THREE.Raycaster();
-        this.pointer = new THREE.Vector2(-999, -999);
-        this.hoveredStall = null;
-        this.activeStall = null;
-
-        // Bindings
-        this.animate = this.animate.bind(this);
-        this.onResize = this.onResize.bind(this);
-        this.onPointerMove = this.onPointerMove.bind(this);
-        this.onPointerClick = this.onPointerClick.bind(this);
-        this.handleHashChange = this.handleHashChange.bind(this);
-
-        this.init();
-      }
-
-      /**
-       * Initialization with Strict Error Boundary
-       */
-      init() {
-        // Setup Hash Routing First (Works in both 3D & 2D modes)
-        this.setupHashRouter();
-
-        // Setup 2D Catalog and Overlay Handlers
-        this.render2DCatalogGrid();
-        this.setupUIHandlers();
-
-        // Initialize Three.js WebGL Engine safely
-        this.bootWebGL();
-      }
-
-      /**
-       * Boot WebGL with Context-Loss Listeners & Try-Catch
-       */
-      bootWebGL() {
-        try {
-          const testGl = this.canvas.getContext('webgl2') || 
-                         this.canvas.getContext('webgl') || 
-                         this.canvas.getContext('experimental-webgl');
-          
-          if (!testGl) {
-            throw new Error("WebGL context creation returned null. Hardware acceleration may be disabled.");
-          }
-
-          // Setup Context-Loss Event Listeners on the Canvas
-          this.canvas.addEventListener('webglcontextlost', (e) => {
-            e.preventDefault();
-            console.warn('[NDB SwiftStack] WebGL Context Lost event caught!');
-            this.handleContextLost('WebGL graphics context was lost or terminated by GPU.');
-          }, false);
-
-          this.canvas.addEventListener('webglcontextrestored', () => {
-            console.info('[NDB SwiftStack] WebGL Context Restored! Re-initializing 3D scene...');
-            this.handleContextRestored();
-          }, false);
-
-          // Build Three.js Core
-          this.setupRenderer();
-          this.setupScene();
-          this.setupCamera();
-          this.setupLighting();
-          this.setupControls();
-          this.setupRealisticPlaza();
-          this.setupArchitecturalPavilions();
-          this.setup3DInteractions();
-
-          this.isWebGLRunning = true;
-          this.container.classList.remove('opacity-0', 'pointer-events-none');
-
-          // Start Render Loop
-          this.clock.start();
-          this.animate();
-
-          // Process current route if any
-          this.handleHashChange();
-
-        } catch (error) {
-          console.warn("[NDB SwiftStack WebGL Fallback Active]", error);
-          this.handleContextLost(error.message);
-        }
-      }
-
-      /**
-       * Graceful Context Loss & Fallback Handler
-       */
-      handleContextLost(reasonMessage) {
-        this.isWebGLRunning = false;
-        if (this.animationFrameId) {
-          cancelAnimationFrame(this.animationFrameId);
-          this.animationFrameId = null;
-        }
-
-        // Hide 3D Canvas
-        this.container.classList.add('opacity-0', 'pointer-events-none');
-
-        // Show 2D Fallback Layout
-        this.fallbackContainer.classList.remove('hidden');
-
-        // Display diagnostic reason banner
-        const banner = document.getElementById('fallback-reason-banner');
-        const reasonText = document.getElementById('fallback-reason-text');
-        if (banner && reasonText) {
-          reasonText.textContent = ` ${reasonMessage || 'Hardware acceleration unavailable.'} Seamless 2D grid directory active.`;
-          banner.classList.remove('hidden');
-        }
-
-        this.showToast('Switched to 2D Fallback Grid');
-      }
-
-      /**
-       * Context Restored Handler
-       */
-      handleContextRestored() {
-        const banner = document.getElementById('fallback-reason-banner');
-        if (banner) banner.classList.add('hidden');
-        this.bootWebGL();
-      }
-
-      /**
-       * Setup WebGLRenderer
-       */
-      setupRenderer() {
-        if (this.renderer) {
-          this.renderer.dispose();
-        }
-        this.renderer = new THREE.WebGLRenderer({
-          canvas: this.canvas,
-          antialias: true,
-          alpha: true,
-          powerPreference: "high-performance"
-        });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.1;
-      }
-
-      /**
-       * Setup Scene & Realistic Atmospheric Depth
-       */
-      setupScene() {
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x0a0e17);
-        // Deterministic linear fog: crystal clear over stalls (35 units), smooth fade to background (100 units)
-        this.scene.fog = new THREE.Fog(0x0a0e17, 35, 100);
-      }
-
-      /**
-       * Setup Camera with Tuned FOV & Strict Clipping Planes
-       */
-      setupCamera() {
-        const aspect = window.innerWidth / window.innerHeight;
-        const fov = aspect < 1 ? 48 : 38;
-        // Tight clipping planes: near 0.5 to prevent z-fighting, far 105 to eliminate infinite dark void rendering
-        this.camera = new THREE.PerspectiveCamera(fov, aspect, 0.5, 105);
-        this.resetCamera(false);
-      }
-
-      /**
-       * Reset Camera View Locked Directly onto Bazaar Stalls
-       */
-      resetCamera(animated = true) {
-        const targetPos = { x: 26, y: 15, z: 28 };
-        const targetLook = { x: 0, y: 1.8, z: 0 };
-
-        if (!animated) {
-          this.camera.position.set(targetPos.x, targetPos.y, targetPos.z);
-          if (this.controls) this.controls.target.set(targetLook.x, targetLook.y, targetLook.z);
-          return;
-        }
-
-        gsap.to(this.camera.position, {
-          x: targetPos.x,
-          y: targetPos.y,
-          z: targetPos.z,
-          duration: 1.4,
-          ease: "power2.inOut"
-        });
-        gsap.to(this.controls.target, {
-          x: targetLook.x,
-          y: targetLook.y,
-          z: targetLook.z,
-          duration: 1.4,
-          ease: "power2.inOut"
-        });
-      }
-
-      /**
-       * Setup Unified Architectural Lighting System
-       * Single directional sun light with soft shadows and balanced ambient hemisphere lighting
-       * Eliminates excessive point lights and noisy specular glare
-       */
-      setupLighting() {
-        this.lights = {};
-
-        // Balanced Sky & Ground Ambient Hemisphere Lighting
-        // Cool architectural sky tone with warm slate ground bounce for natural atmospheric depth
-        this.lights.hemi = new THREE.HemisphereLight(0x8ea2be, 0x111724, 0.95);
-        this.lights.hemi.position.set(0, 50, 0);
-        this.scene.add(this.lights.hemi);
-
-        // Subtle Ambient Base Fill (soft non-directional base tone)
-        this.lights.ambient = new THREE.AmbientLight(0x0f172a, 0.4);
-        this.scene.add(this.lights.ambient);
-
-        // Unified Single Sun-Light Direction with Soft PCF Shadows
-        // Angle chosen to cast cohesive, clean architectural shadows across all stalls and the plaza
-        this.lights.sun = new THREE.DirectionalLight(0xfff5e6, 1.65);
-        this.lights.sun.position.set(34, 48, 28);
-        this.lights.sun.castShadow = true;
-        this.lights.sun.shadow.mapSize.width = 2048;
-        this.lights.sun.shadow.mapSize.height = 2048;
-        this.lights.sun.shadow.camera.near = 1.0;
-        this.lights.sun.shadow.camera.far = 120;
-        this.lights.sun.shadow.camera.left = -38;
-        this.lights.sun.shadow.camera.right = 38;
-        this.lights.sun.shadow.camera.top = 38;
-        this.lights.sun.shadow.camera.bottom = -38;
-        this.lights.sun.shadow.bias = -0.0003;
-        this.lights.sun.shadow.normalBias = 0.02;
-        this.lights.sun.shadow.radius = 3.5;
-        this.scene.add(this.lights.sun);
-      }
-
-      /**
-       * Setup OrbitControls with Strict Distance & Panning Bounds
-       * Prevents infinite canvas panning into empty dark void spaces
-       */
-      setupControls() {
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.05;
-        this.controls.screenSpacePanning = true;
-        this.controls.panSpeed = 0.75;
-
-        // Strict distance bounds: keeps camera locked around the bazaar stalls
-        this.controls.minDistance = 9;
-        this.controls.maxDistance = 46;
-
-        // Polar angle bounds: prevent camera from dipping below ground or extreme top-down angles
-        this.controls.minPolarAngle = Math.PI * 0.15; // ~27 degrees
-        this.controls.maxPolarAngle = Math.PI / 2 - 0.06; // ~86.5 degrees
-        this.controls.target.set(0, 1.8, 0);
-
-        // Clamp panning target on user interaction
-        this.controls.addEventListener('change', () => {
-          this.clampControlsBounds();
-        });
-      }
-
-      /**
-       * Constrains OrbitControls target strictly to the market stalls perimeter
-       */
-      clampControlsBounds() {
-        if (!this.controls) return;
-        const maxPanRadius = 22;
-        const dist = Math.hypot(this.controls.target.x, this.controls.target.z);
-        if (dist > maxPanRadius) {
-          const factor = maxPanRadius / dist;
-          this.controls.target.x *= factor;
-          this.controls.target.z *= factor;
-        }
-        this.controls.target.y = THREE.MathUtils.clamp(this.controls.target.y, 0.8, 3.5);
-      }
-
-      /**
-       * Setup Realistic Paved Plaza & Landscaping (No Sci-Fi Grid or Floating Rings)
-       */
-      setupRealisticPlaza() {
-        const paverTexture = TextureFactory.createPlazaPavers();
-
-        // Realistic Ground Pavement
-        const groundGeo = new THREE.PlaneGeometry(150, 150);
-        const groundMat = new THREE.MeshStandardMaterial({
-          map: paverTexture,
-          roughness: 0.75,
-          metalness: 0.15
-        });
-        const ground = new THREE.Mesh(groundGeo, groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.position.y = -0.01;
-        ground.receiveShadow = true;
-        this.scene.add(ground);
-
-        // Central Landscaped Plaza Courtyard (Granite Raised Curb & Planter)
-        const curbGeo = new THREE.CylinderGeometry(11, 11.4, 0.45, 48);
-        const curbMat = new THREE.MeshStandardMaterial({
-          color: 0x1e2638,
-          roughness: 0.6,
-          metalness: 0.2
-        });
-        const curb = new THREE.Mesh(curbGeo, curbMat);
-        curb.position.y = 0.22;
-        curb.receiveShadow = true;
-        this.scene.add(curb);
-
-        // Central Polished Walkway Ring
-        const walkGeo = new THREE.RingGeometry(8.5, 10.8, 48);
-        const walkMat = new THREE.MeshStandardMaterial({
-          color: 0x273349,
-          roughness: 0.45,
-          metalness: 0.3,
-          side: THREE.DoubleSide
-        });
-        const walkRing = new THREE.Mesh(walkGeo, walkMat);
-        walkRing.rotation.x = -Math.PI / 2;
-        walkRing.position.y = 0.46;
-        walkRing.receiveShadow = true;
-        this.scene.add(walkRing);
-
-        // Central Landscaped Planter Box (Clean Architectural Granite with Low Shrubbery)
-        const planterGeo = new THREE.CylinderGeometry(6.5, 6.8, 0.65, 36);
-        const planterMat = new THREE.MeshStandardMaterial({ color: 0x182030, roughness: 0.8 });
-        const planter = new THREE.Mesh(planterGeo, planterMat);
-        planter.position.y = 0.55;
-        planter.receiveShadow = true;
-        this.scene.add(planter);
-
-        const soilGeo = new THREE.CylinderGeometry(6.3, 6.3, 0.1, 36);
-        const soilMat = new THREE.MeshStandardMaterial({ color: 0x0a1410, roughness: 0.9 });
-        const soil = new THREE.Mesh(soilGeo, soilMat);
-        soil.position.y = 0.9;
-        this.scene.add(soil);
-
-        // Central Architectural Lighting Beacon Post (Functional Plaza Lamp)
-        const lampPostGeo = new THREE.CylinderGeometry(0.18, 0.25, 4.5, 16);
-        const lampPostMat = new THREE.MeshStandardMaterial({ color: 0x2d3748, metalness: 0.85, roughness: 0.2 });
-        const lampPost = new THREE.Mesh(lampPostGeo, lampPostMat);
-        lampPost.position.y = 2.8;
-        lampPost.castShadow = true;
-        this.scene.add(lampPost);
-
-        const luminaireGeo = new THREE.CylinderGeometry(0.8, 0.3, 0.35, 16);
-        const luminaireMat = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          emissive: 0xfff3db,
-          emissiveIntensity: 0.35,
-          roughness: 0.2
-        });
-        const luminaire = new THREE.Mesh(luminaireGeo, luminaireMat);
-        luminaire.position.y = 4.8;
-        this.scene.add(luminaire);
-
-        // Perimeter Low Pathway Lighting Bollards along Pavilion Streets (Clean Architectural Guides)
-        const bollardGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.7, 12);
-        const bollardMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8 });
-        const bollardCapMat = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          emissive: 0xffeedd,
-          emissiveIntensity: 0.2
-        });
-
-        for (let i = 0; i < 16; i++) {
-          const ang = (i / 16) * Math.PI * 2;
-          const bx = Math.cos(ang) * 15.5;
-          const bz = Math.sin(ang) * 15.5;
-
-          const bMesh = new THREE.Mesh(bollardGeo, bollardMat);
-          bMesh.position.set(bx, 0.35, bz);
-          bMesh.receiveShadow = true;
-          this.scene.add(bMesh);
-
-          const bCap = new THREE.Mesh(new THREE.CylinderGeometry(0.082, 0.082, 0.1, 12), bollardCapMat);
-          bCap.position.set(bx, 0.65, bz);
-          this.scene.add(bCap);
-        }
-      }
-
-      /**
-       * Construct Highly Realistic, Textured Shop Facades with Dynamic Illuminated Signages
-       */
-      setupArchitecturalPavilions() {
-        this.hitMeshes = [];
-        this.stallsMap.clear();
-
-        const woodTexture = TextureFactory.createWoodSlats();
-
-        NDB_STALLS.forEach((stall) => {
-          const sGroup = new THREE.Group();
-          sGroup.position.set(stall.coords.x, 0, stall.coords.z);
-          sGroup.rotation.y = stall.rotY || 0;
-
-          const isOnline = stall.status === 'online';
-          const primaryColor = new THREE.Color(stall.color);
-          const facadeTexture = TextureFactory.createFacadeTexture(stall.accent);
-
-          // 1. Solid Granite Foundation Slab with Entrance Threshold Step
-          const plinthGeo = new THREE.BoxGeometry(7.0, 0.4, 5.4);
-          const plinthMat = new THREE.MeshStandardMaterial({
-            color: 0x182030,
-            roughness: 0.7,
-            metalness: 0.25
-          });
-          const plinthMesh = new THREE.Mesh(plinthGeo, plinthMat);
-          plinthMesh.position.set(0, 0.2, 0);
-          plinthMesh.receiveShadow = true;
-          plinthMesh.castShadow = true;
-          sGroup.add(plinthMesh);
-
-          // Dark granite welcome entrance threshold mat
-          const matGeo = new THREE.BoxGeometry(3.2, 0.04, 1.2);
-          const matMesh = new THREE.Mesh(matGeo, new THREE.MeshStandardMaterial({ color: 0x0f1523, roughness: 0.8 }));
-          matMesh.position.set(0, 0.42, 2.1);
-          matMesh.receiveShadow = true;
-          sGroup.add(matMesh);
-
-          // 2. Rear Architectural Timber Acoustic Wall
-          const backWallGeo = new THREE.BoxGeometry(6.6, 3.8, 0.25);
-          const backWallMat = new THREE.MeshStandardMaterial({
-            map: woodTexture,
-            roughness: 0.75,
-            metalness: 0.1
-          });
-          const backWall = new THREE.Mesh(backWallGeo, backWallMat);
-          backWall.position.set(0, 2.1, -2.35);
-          backWall.castShadow = true;
-          backWall.receiveShadow = true;
-          sGroup.add(backWall);
-
-          // 3. Textured Exterior Side Walls (Precision Architectural Composite Panels)
-          const sideWallGeo = new THREE.BoxGeometry(0.25, 3.8, 4.8);
-          const sideWallMat = new THREE.MeshStandardMaterial({
-            map: facadeTexture,
-            roughness: 0.55,
-            metalness: 0.4
-          });
-
-          const leftWall = new THREE.Mesh(sideWallGeo, sideWallMat);
-          leftWall.position.set(-3.25, 2.1, 0);
-          leftWall.castShadow = true;
-          leftWall.receiveShadow = true;
-          sGroup.add(leftWall);
-
-          const rightWall = new THREE.Mesh(sideWallGeo, sideWallMat);
-          rightWall.position.set(3.25, 2.1, 0);
-          rightWall.castShadow = true;
-          rightWall.receiveShadow = true;
-          sGroup.add(rightWall);
-
-          // 4. Textured Front Facade Pilasters Flanking the Storefront
-          const pierGeo = new THREE.BoxGeometry(1.6, 3.8, 0.35);
-          const pierMat = new THREE.MeshStandardMaterial({
-            map: facadeTexture,
-            roughness: 0.45,
-            metalness: 0.5
-          });
-
-          const leftPier = new THREE.Mesh(pierGeo, pierMat);
-          leftPier.position.set(-2.4, 2.1, 2.45);
-          leftPier.castShadow = true;
-          leftPier.receiveShadow = true;
-          sGroup.add(leftPier);
-
-          const rightPier = new THREE.Mesh(pierGeo, pierMat);
-          rightPier.position.set(2.4, 2.1, 2.45);
-          rightPier.castShadow = true;
-          rightPier.receiveShadow = true;
-          sGroup.add(rightPier);
-
-          // 5. Storefront Glazing & Architectural Metallic Mullions
-          const mullionMat = new THREE.MeshStandardMaterial({ color: 0x1e2738, metalness: 0.9, roughness: 0.2 });
-          
-          // Glazed Transom Window Above Door
-          const transomGlass = new THREE.Mesh(
-            new THREE.BoxGeometry(3.2, 0.8, 0.06),
-            new THREE.MeshStandardMaterial({ color: 0xe0f7fa, transparent: true, opacity: 0.35, roughness: 0.1, metalness: 0.9 })
-          );
-          transomGlass.position.set(0, 3.4, 2.4);
-          sGroup.add(transomGlass);
-
-          // Horizontal Mullion Divider Bar
-          const hMullion = new THREE.Mesh(new THREE.BoxGeometry(3.25, 0.1, 0.12), mullionMat);
-          hMullion.position.set(0, 3.0, 2.42);
-          sGroup.add(hMullion);
-
-          // Vertical Mullion Jambs
-          [-1.6, 1.6].forEach(jx => {
-            const jamb = new THREE.Mesh(new THREE.BoxGeometry(0.1, 3.8, 0.2), mullionMat);
-            jamb.position.set(jx, 2.1, 2.42);
-            sGroup.add(jamb);
-          });
-
-          // 6. Deep Cantilevered Architectural Roof Canopy / Eaves
-          const roofGeo = new THREE.BoxGeometry(7.4, 0.4, 5.8);
-          const roofMat = new THREE.MeshStandardMaterial({
-            color: 0x161d2a,
-            metalness: 0.75,
-            roughness: 0.3
-          });
-          const roofMesh = new THREE.Mesh(roofGeo, roofMat);
-          roofMesh.position.set(0, 4.0, 0.1);
-          roofMesh.castShadow = true;
-          roofMesh.receiveShadow = true;
-          sGroup.add(roofMesh);
-
-          // 7. Dynamic Illuminated Storefront Fascia Signboard (3D Lightbox Casing)
-          const signCasingGeo = new THREE.BoxGeometry(6.4, 1.35, 0.3);
-          const signCasingMat = new THREE.MeshStandardMaterial({ color: 0x0f1522, metalness: 0.85, roughness: 0.3 });
-          const signCasing = new THREE.Mesh(signCasingGeo, signCasingMat);
-          signCasing.position.set(0, 4.5, 2.75);
-          sGroup.add(signCasing);
-
-          // Illuminated Acrylic Front Face with Sharp Dynamic Typography
-          const signTexture = TextureFactory.createSignboard(stall.signTitle, stall.category, stall.accent, stall.merchant);
-          const signGeo = new THREE.PlaneGeometry(6.25, 1.25);
-          const signMat = new THREE.MeshStandardMaterial({
-            map: signTexture,
-            emissiveMap: signTexture,
-            emissive: isOnline ? new THREE.Color(0xffffff) : new THREE.Color(0x222222),
-            emissiveIntensity: isOnline ? 0.85 : 0.05,
-            roughness: 0.15,
-            metalness: 0.05
-          });
-          const signMesh = new THREE.Mesh(signGeo, signMat);
-          signMesh.position.set(0, 4.5, 2.92);
-          sGroup.add(signMesh);
-
-          // 8. Perpendicular Projecting 3D Blade Sign (Hanging Street Sign)
-          const bracketArm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.1, 8), mullionMat);
-          bracketArm.rotation.z = Math.PI / 2;
-          bracketArm.position.set(3.55, 3.4, 2.45);
-          sGroup.add(bracketArm);
-
-          const bladeTexture = TextureFactory.createBladeSign(stall.signTitle, stall.accent);
-          const bladeSignGeo = new THREE.BoxGeometry(0.85, 0.85, 0.1);
-          const bladeSignMat = new THREE.MeshStandardMaterial({
-            map: bladeTexture,
-            emissiveMap: bladeTexture,
-            emissive: isOnline ? new THREE.Color(0xffffff) : new THREE.Color(0x222222),
-            emissiveIntensity: isOnline ? 0.85 : 0.05,
-            roughness: 0.2
-          });
-          const bladeSignMesh = new THREE.Mesh(bladeSignGeo, bladeSignMat);
-          bladeSignMesh.position.set(3.8, 3.0, 2.45);
-          sGroup.add(bladeSignMesh);
-
-          // 9. Storefront Service Counter & Display Vitrine
-          const counterGeo = new THREE.BoxGeometry(5.4, 1.1, 1.4);
-          const counterMat = new THREE.MeshStandardMaterial({
-            color: 0x1a2336,
-            roughness: 0.45,
-            metalness: 0.35
-          });
-          const counter = new THREE.Mesh(counterGeo, counterMat);
-          counter.position.set(0, 0.95, 0.8);
-          counter.castShadow = true;
-          counter.receiveShadow = true;
-          sGroup.add(counter);
-
-          // Marble Countertop Slab
-          const topGeo = new THREE.BoxGeometry(5.6, 0.08, 1.6);
-          const topMat = new THREE.MeshStandardMaterial({
-            color: 0x27364d,
-            roughness: 0.2,
-            metalness: 0.2
-          });
-          const counterTop = new THREE.Mesh(topGeo, topMat);
-          counterTop.position.set(0, 1.54, 0.8);
-          counterTop.castShadow = true;
-          counterTop.receiveShadow = true;
-          sGroup.add(counterTop);
-
-          // Glass Display Vitrine Case
-          const glassGeo = new THREE.BoxGeometry(4.8, 0.75, 1.1);
-          const glassMat = new THREE.MeshStandardMaterial({
-            color: 0xe0f7fa,
-            transparent: true,
-            opacity: 0.35,
-            roughness: 0.1,
-            metalness: 0.9
-          });
-          const showcase = new THREE.Mesh(glassGeo, glassMat);
-          showcase.position.set(0, 1.95, 0.8);
-          sGroup.add(showcase);
-
-          // Realistic Display Items Inside Vitrine
-          const prodMat1 = new THREE.MeshStandardMaterial({ color: stall.color, metalness: 0.6, roughness: 0.25 });
-          const prodMat2 = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.8, roughness: 0.2 });
-
-          for (let pi = -1.8; pi <= 1.8; pi += 0.9) {
-            const pMesh = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.28, 0.35), prodMat1);
-            pMesh.position.set(pi, 1.76, 0.8);
-            sGroup.add(pMesh);
-
-            const pCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.35, 12), prodMat2);
-            pCyl.position.set(pi + 0.35, 1.76, 0.7);
-            sGroup.add(pCyl);
-          }
-
-          // 10. Recessed Downlight Fixtures under Ceiling (Clean Architectural Luminaire Lenses)
-          const fixtureGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.05, 16);
-          const fixtureMat = new THREE.MeshStandardMaterial({
-            color: 0xffffff,
-            emissive: isOnline ? 0xfff4e0 : 0x222222,
-            emissiveIntensity: isOnline ? 0.75 : 0.05
-          });
-
-          [-1.6, 0, 1.6].forEach(fx => {
-            const fix = new THREE.Mesh(fixtureGeo, fixtureMat);
-            fix.position.set(fx, 3.75, 0.8);
-            sGroup.add(fix);
-          });
-
-          // 11. Doorway Status LED Indicator
-          const ledGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.04, 12);
-          const ledMat = new THREE.MeshBasicMaterial({
-            color: isOnline ? 0x10b981 : 0x475569
-          });
-          const led = new THREE.Mesh(ledGeo, ledMat);
-          led.rotation.x = Math.PI / 2;
-          led.position.set(2.8, 2.6, 2.65);
-          sGroup.add(led);
-
-          // 12. Raycasting Interaction Hitbox
-          const hitGeo = new THREE.BoxGeometry(7.2, 5.0, 5.6);
-          const hitMat = new THREE.MeshBasicMaterial({ visible: false });
-          const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-          hitMesh.position.set(0, 2.5, 0.2);
-          hitMesh.userData = { stallId: stall.id };
-          sGroup.add(hitMesh);
-
-          this.hitMeshes.push(hitMesh);
-          this.stallsMap.set(stall.id, {
-            data: stall,
-            group: sGroup,
-            signMesh: signMesh,
-            bladeSignMesh: bladeSignMesh,
-            fixtureMat: fixtureMat,
-            downlight: null,
-            ledMesh: led,
-            hitMesh: hitMesh
-          });
-
-          this.scene.add(sGroup);
-        });
-      }
-
-      /**
-       * 3D Raycasting & Listeners
-       */
-      setup3DInteractions() {
-        window.addEventListener('resize', this.onResize);
-        window.addEventListener('pointermove', this.onPointerMove);
-        this.canvas.addEventListener('click', this.onPointerClick);
-        this.canvas.addEventListener('touchend', (e) => {
-          if (e.changedTouches.length > 0) {
-            const touch = e.changedTouches[0];
-            this.pointer.x = (touch.clientX / window.innerWidth) * 2 - 1;
-            this.pointer.y = -(touch.clientY / window.innerHeight) * 2 + 1;
-            this.performRaycast(true);
-          }
-        });
-      }
-
-      onResize() {
-        if (!this.renderer || !this.camera) return;
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const aspect = w / h;
-        this.camera.aspect = aspect;
-        this.camera.fov = aspect < 1 ? 48 : 38;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(w, h);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      }
-
-      onPointerMove(e) {
-        this.pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-        this.pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-        const tip = document.getElementById('hud-tooltip');
-        tip.style.left = `${e.clientX}px`;
-        tip.style.top = `${e.clientY}px`;
-
-        if (this.isWebGLRunning) {
-          this.performRaycast(false);
-        }
-      }
-
-      onPointerClick() {
-        if (this.isWebGLRunning) {
-          this.performRaycast(true);
-        }
-      }
-
-      performRaycast(isClick) {
-        if (!this.camera) return;
-        this.raycaster.setFromCamera(this.pointer, this.camera);
-        const hits = this.raycaster.intersectObjects(this.hitMeshes);
-
-        if (hits.length > 0) {
-          const stallId = hits[0].object.userData.stallId;
-          const stallObj = this.stallsMap.get(stallId);
-
-          if (isClick) {
-            window.location.hash = `#/stall/${stallId}`;
-            return;
-          }
-
-          if (this.hoveredStall !== stallObj) {
-            this.clearHover();
-            this.hoveredStall = stallObj;
-            document.body.style.cursor = 'pointer';
-
-            // Subtle architectural highlight on hover (clean, zero point-light noise)
-            if (stallObj.fixtureMat) {
-              gsap.to(stallObj.fixtureMat, { emissiveIntensity: 1.0, duration: 0.25 });
-            }
-            gsap.to(stallObj.signMesh.material, { emissiveIntensity: 1.1, duration: 0.25 });
-            if (stallObj.bladeSignMesh) {
-              gsap.to(stallObj.bladeSignMesh.material, { emissiveIntensity: 1.1, duration: 0.25 });
-            }
-
-            const tip = document.getElementById('hud-tooltip');
-            document.getElementById('hud-title').textContent = stallObj.data.name;
-            document.getElementById('hud-category').textContent = `${stallObj.data.category} • ${stallObj.data.status.toUpperCase()}`;
-            
-            const dot = document.getElementById('hud-status-dot');
-            dot.className = stallObj.data.status === 'online' ? 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping' : 'w-2.5 h-2.5 rounded-full bg-slate-500';
-            tip.style.opacity = '1';
-
-            this.audio.playPip();
-          }
-        } else {
-          if (!isClick && this.hoveredStall) {
-            this.clearHover();
-          }
-        }
-      }
-
-      clearHover() {
-        if (this.hoveredStall) {
-          const isOnline = this.hoveredStall.data.status === 'online';
-          if (this.hoveredStall.fixtureMat) {
-            gsap.to(this.hoveredStall.fixtureMat, { emissiveIntensity: isOnline ? 0.75 : 0.05, duration: 0.3 });
-          }
-          gsap.to(this.hoveredStall.signMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.08, duration: 0.3 });
-          if (this.hoveredStall.bladeSignMesh) {
-            gsap.to(this.hoveredStall.bladeSignMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.05, duration: 0.3 });
-          }
-          this.hoveredStall = null;
-          document.body.style.cursor = 'default';
-          document.getElementById('hud-tooltip').style.opacity = '0';
-        }
-      }
-
-      /**
-       * Glide Camera Smoothly to Eye-Level View Looking Directly at the Pavilion
-       */
-      focusOnStall(stallId) {
-        const stallObj = this.stallsMap.get(stallId);
-        const stallData = NDB_STALLS.find(s => s.id === stallId);
-        if (!stallData) return;
-
-        this.activeStall = stallData;
-        this.audio.playFocus();
-
-        if (this.isWebGLRunning && stallObj && this.controls) {
-          const pos = stallObj.data.coords;
-          const rotY = stallObj.data.rotY || 0;
-
-          // Compute realistic camera position facing directly into the stall front
-          const viewDist = 13.5;
-          const camX = pos.x + Math.sin(rotY) * viewDist;
-          const camZ = pos.z + Math.cos(rotY) * viewDist;
-          const camY = 3.8; // Realistic eye level
-
-          gsap.to(this.controls.target, {
-            x: pos.x,
-            y: 2.2,
-            z: pos.z,
-            duration: 1.4,
-            ease: "power2.inOut"
-          });
-
-          gsap.to(this.camera.position, {
-            x: camX,
-            y: camY,
-            z: camZ,
-            duration: 1.6,
-            ease: "power2.inOut"
-          });
-        }
-
-        this.openModal(stallData);
-      }
-
-      /**
-       * Populate & Open Glassmorphism Modal
-       */
-      openModal(data) {
-        document.getElementById('modal-name').textContent = data.name;
-        document.getElementById('modal-merchant').innerHTML =
-          `Merchant: <span class="text-cyan-300 font-medium">${data.merchant}</span>`;
-        document.getElementById('modal-cat').textContent = data.category;
-        document.getElementById('modal-desc').textContent = data.description;
-        document.getElementById('modal-rating').textContent = data.rating;
-        document.getElementById('modal-traffic').textContent = data.traffic;
-
-        const isOnline = data.status === 'online';
-        const toggle = document.getElementById('modal-state-toggle');
-        toggle.checked = isOnline;
-
-        const pill    = document.getElementById('modal-status-pill');
-        const sText   = document.getElementById('modal-status-text');
-        if (isOnline) {
-          pill.className  = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
-          sText.textContent = 'Store Open';
-        } else {
-          pill.className  = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-slate-700/50 text-slate-400 border border-slate-600';
-          sText.textContent = 'Store Closed';
-        }
-
-        // Offerings
-        const list = document.getElementById('modal-items');
-        list.innerHTML = '';
-        document.getElementById('modal-item-count').textContent = `${data.items.length} Products`;
-        data.items.forEach(p => {
-          const row = document.createElement('div');
-          row.className = 'flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/80 border border-white/5 hover:border-cyan-400/30 transition-all';
-          row.innerHTML = `
-            <div>
-              <div class="text-xs font-semibold text-white">${p.name}</div>
-              <span class="text-[10px] text-cyan-400 font-mono">${p.tag}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-mono font-bold text-amber-300">${p.price}</span>
-              <button class="btn-buy px-2.5 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-[10px] uppercase font-mono" data-name="${p.name}">Inquire</button>
-            </div>
-          `;
-          list.appendChild(row);
-        });
-        list.querySelectorAll('.btn-buy').forEach(b => {
-          b.addEventListener('click', e => {
-            e.stopPropagation();
-            this.showToast(`Order initiated for ${b.getAttribute('data-name')}`);
-            this.audio.playToggle();
-          });
-        });
-
-        // Open modal with CSS spring animation
-        document.getElementById('stall-modal').classList.add('modal-open');
-      }
-
-      /**
-       * Realtime State Toggle (Online / Closed Storefront)
-       */
-      toggleStallState(stallId, newStatus) {
-        const stallData = NDB_STALLS.find(s => s.id === stallId);
-        if (!stallData) return;
-        stallData.status = newStatus;
-
-        const isOnline = newStatus === 'online';
-
-        // Update 3D Storefront Visuals Realistically
-        if (this.isWebGLRunning && this.stallsMap.has(stallId)) {
-          const stallObj = this.stallsMap.get(stallId);
-
-          // Signboard illumination
-          gsap.to(stallObj.signMesh.material, {
-            emissiveIntensity: isOnline ? 0.85 : 0.08,
-            duration: 0.5
-          });
-
-          // Projecting blade sign illumination
-          if (stallObj.bladeSignMesh) {
-            gsap.to(stallObj.bladeSignMesh.material, {
-              emissiveIntensity: isOnline ? 0.85 : 0.05,
-              duration: 0.5
-            });
-          }
-
-          // Downlight bezel lens (clean architectural appearance, zero point light)
-          if (stallObj.fixtureMat) {
-            stallObj.fixtureMat.emissive.setHex(isOnline ? 0xfff4e0 : 0x222222);
-            stallObj.fixtureMat.emissiveIntensity = isOnline ? 0.75 : 0.05;
-          }
-
-          // LED indicator
-          stallObj.ledMesh.material.color.setHex(isOnline ? 0x10b981 : 0x475569);
-        }
-
-        // Update Modal Status Pill
-        const pill  = document.getElementById('modal-status-pill');
-        const sText = document.getElementById('modal-status-text');
-        if (isOnline) {
-          pill.className  = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
-          sText.textContent = 'Store Open';
-        } else {
-          pill.className  = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-slate-700/50 text-slate-400 border border-slate-600';
-          sText.textContent = 'Store Closed';
-        }
-
-        this.render2DCatalogGrid();
-        this.audio.playToggle();
-        this.showToast(`${stallData.name}: ${isOnline ? 'STORE OPEN' : 'STORE CLOSED'}`);
-      }
-
-      /**
-       * Toggle Environment (Evening Architectural / Bright Daytime)
-       */
-      toggleLighting() {
-        this.isDaylight = !this.isDaylight;
-        const icon = document.getElementById('icon-light');
-
-        if (this.isDaylight) {
-          if (icon) icon.className = 'fa-solid fa-sun text-sm text-amber-400';
-          if (this.scene) {
-            gsap.to(this.scene.background, { r: 0.78, g: 0.86, b: 0.94, duration: 1 });
-            gsap.to(this.scene.fog.color, { r: 0.78, g: 0.86, b: 0.94, duration: 1 });
-          }
-          if (this.lights) {
-            gsap.to(this.lights.ambient, { intensity: 1.4, duration: 1 });
-            gsap.to(this.lights.sun, { intensity: 2.2, duration: 1 });
-          }
-          this.showToast('Daylight Marketplace View');
-        } else {
-          if (icon) icon.className = 'fa-solid fa-moon text-sm text-cyan-300';
-          if (this.scene) {
-            gsap.to(this.scene.background, { r: 0.04, g: 0.055, b: 0.09, duration: 1 });
-            gsap.to(this.scene.fog.color, { r: 0.04, g: 0.055, b: 0.09, duration: 1 });
-          }
-          if (this.lights) {
-            gsap.to(this.lights.ambient, { intensity: 0.85, duration: 1 });
-            gsap.to(this.lights.sun, { intensity: 1.4, duration: 1 });
-          }
-          this.showToast('Evening Illuminated View');
-        }
-        this.audio.playToggle();
-      }
-
-      /**
-       * Render 2D Responsive Catalog
-       */
-      render2DCatalogGrid(category = 'all', keyword = '') {
-        const grid = document.getElementById('catalog-2d-grid');
-        grid.innerHTML = '';
-
-        const term = keyword.toLowerCase().trim();
-        const filtered = NDB_STALLS.filter(s => {
-          const matchCat = category === 'all' || s.category === category;
-          const matchSearch = !term || s.name.toLowerCase().includes(term) || s.description.toLowerCase().includes(term);
-          return matchCat && matchSearch;
-        });
-
-        document.getElementById('catalog-2d-counter').textContent = `Showing ${filtered.length} of ${NDB_STALLS.length} Pavilions`;
-
-        filtered.forEach(data => {
-          const isOnline = data.status === 'online';
-          const card = document.createElement('div');
-          card.className = 'glass-card rounded-2xl p-5 border border-white/10 hover:border-cyan-400/40 transition-all flex flex-col justify-between space-y-4';
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
-                  ${data.category}
-                </span>
-                <span class="flex items-center space-x-1.5 text-xs font-mono ${isOnline ? 'text-emerald-400' : 'text-slate-500'}">
-                  <span class="w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}"></span>
-                  <span>${isOnline ? 'OPEN' : 'CLOSED'}</span>
-                </span>
-              </div>
-              <h3 class="text-lg font-bold text-white font-mono mb-0.5">${data.name}</h3>
-              <p class="text-xs text-slate-400 mb-2.5">Merchant: <span class="text-slate-200">${data.merchant}</span></p>
-              <p class="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-2">${data.description}</p>
-              
-              <div class="space-y-1.5 border-t border-white/5 pt-3">
-                <div class="text-[10px] uppercase font-mono text-slate-400">Featured Offerings:</div>
-                ${data.items.map(it => `
-                  <div class="flex items-center justify-between text-xs py-0.5">
-                    <span class="text-slate-300">${it.name}</span>
-                    <span class="font-mono text-cyan-400 font-bold">${it.price}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-2 pt-2 border-t border-white/10">
-              <a href="#/stall/${data.id}" class="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider font-mono transition-colors flex items-center justify-center space-x-1.5">
-                <i class="fa-solid fa-cube"></i>
-                <span>Inspect Storefront</span>
-              </a>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      }
-
-      /**
-       * Filter 3D Pavilions Visually (Architectural dimming/highlighting)
-       */
-      filter3DScene(category = 'all', keyword = '') {
-        const term = keyword.toLowerCase().trim();
-        let matchCount = 0;
-
-        this.stallsMap.forEach((stallObj) => {
-          const matchCat = category === 'all' || stallObj.data.category === category;
-          const matchSearch = !term || stallObj.data.name.toLowerCase().includes(term) || stallObj.data.description.toLowerCase().includes(term);
-          const isMatch = matchCat && matchSearch;
-
-          if (isMatch) matchCount++;
-
-          // Smooth architectural opacity / scale modulation
-          gsap.to(stallObj.group.scale, {
-            x: isMatch ? 1 : 0.35,
-            y: isMatch ? 1 : 0.35,
-            z: isMatch ? 1 : 0.35,
-            duration: 0.45,
-            ease: "power2.out"
-          });
-
-          if (stallObj.fixtureMat) {
-            gsap.to(stallObj.fixtureMat, {
-              emissiveIntensity: isMatch ? (stallObj.data.status === 'online' ? 0.75 : 0.05) : 0.02,
-              duration: 0.45
-            });
-          }
-        });
-      }
-
-      /**
-       * Strict Relative Hash Router Implementation
-       */
-      setupHashRouter() {
-        window.addEventListener('hashchange', this.handleHashChange);
-      }
-
-      handleHashChange() {
-        const hash = window.location.hash || '#/';
-
-        if (hash === '#/' || hash === '' || hash === '#') {
-          document.getElementById('stall-modal').classList.remove('modal-open');
-          if (this.isWebGLRunning) {
-            this.fallbackContainer.classList.add('hidden');
-          }
-        } else if (hash === '#/catalog' || hash === '#/directory') {
-          this.render2DCatalogGrid();
-          this.fallbackContainer.classList.remove('hidden');
-        } else if (hash.startsWith('#/stall/')) {
-          const stallId = hash.replace('#/stall/', '').trim();
-          this.focusOnStall(stallId);
-        }
-      }
-
-      /**
-       * UI Event Handlers
-       */
-      setupUIHandlers() {
-        // Quick Jump Bar
-        const bar = document.getElementById('quick-jump-bar');
-        bar.innerHTML = '';
-        NDB_STALLS.forEach(s => {
-          const a = document.createElement('a');
-          a.href = `#/stall/${s.id}`;
-          a.className = 'flex-shrink-0 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-cyan-500 hover:text-black border border-white/5 text-xs text-slate-300 font-medium transition-all flex items-center space-x-2';
-          a.innerHTML = `
-            <span class="w-2 h-2 rounded-full" style="background-color: ${s.accent};"></span>
-            <span>${s.name.split(' ')[0]}</span>
-          `;
-          bar.appendChild(a);
-        });
-
-        // 2D Catalog Category Filters
-        const catContainer = document.getElementById('catalog-2d-filters');
-        catContainer.innerHTML = '';
-        ['all', 'Electronics', 'Fashion', 'Organic', 'Handicrafts', 'Cyber AI'].forEach(cat => {
-          const btn = document.createElement('button');
-          btn.className = `px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${cat === 'all' ? 'bg-cyan-500 text-black font-bold' : 'bg-slate-900 text-slate-300 hover:text-white border border-white/5'}`;
-          btn.textContent = cat === 'all' ? 'All Pavilions' : cat;
-          btn.addEventListener('click', () => {
-            catContainer.querySelectorAll('button').forEach(b => {
-              b.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-slate-900 text-slate-300 hover:text-white border border-white/5';
-            });
-            btn.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-cyan-500 text-black font-bold';
-            this.render2DCatalogGrid(cat, document.getElementById('global-search').value);
-            this.audio.playPip();
-          });
-          catContainer.appendChild(btn);
-        });
-
-        // Global Search
-        const search = document.getElementById('global-search');
-        search.addEventListener('input', (e) => {
-          const activeCat = document.querySelector('.cat-pill.active')?.getAttribute('data-cat') || 'all';
-          if (this.isWebGLRunning) this.filter3DScene(activeCat, e.target.value);
-          this.render2DCatalogGrid(activeCat, e.target.value);
-        });
-
-        // Top Category Pills
-        const pills = document.querySelectorAll('.cat-pill');
-        pills.forEach(p => {
-          p.addEventListener('click', () => {
-            pills.forEach(b => b.classList.remove('active', 'bg-cyan-500', 'text-black'));
-            pills.forEach(b => b.classList.add('text-slate-300'));
-            p.classList.add('active', 'bg-cyan-500', 'text-black');
-            p.classList.remove('text-slate-300');
-
-            const cat = p.getAttribute('data-cat');
-            if (this.isWebGLRunning) this.filter3DScene(cat, search.value);
-            this.render2DCatalogGrid(cat, search.value);
-            this.audio.playPip();
-          });
-        });
-
-        // Fallback 2D View Switch
-        const btnSwitch3D = document.getElementById('btn-switch-to-3d');
-        if (btnSwitch3D) {
-          btnSwitch3D.addEventListener('click', () => {
-            window.location.hash = '#/';
-          });
-        }
-
-        const btnRecoverWebGL = document.getElementById('btn-try-recovering-webgl');
-        if (btnRecoverWebGL) {
-          btnRecoverWebGL.addEventListener('click', () => {
-            this.bootWebGL();
-          });
-        }
-
-        // Close Modal (both close buttons)
-        const closeModal = () => {
-          document.getElementById('stall-modal').classList.remove('modal-open');
-          this.audio.playPip();
-        };
-        document.getElementById('btn-close-modal').addEventListener('click', closeModal);
-        document.getElementById('btn-close-modal-footer').addEventListener('click', closeModal);
-
-        // Click backdrop to close
-        document.getElementById('stall-modal').addEventListener('click', (e) => {
-          if (e.target === document.getElementById('stall-modal')) closeModal();
-        });
-
-        // ESC key closes modal
-        window.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') closeModal();
-        });
-
-        // Copy Link Button
-        document.getElementById('btn-modal-share').addEventListener('click', () => {
-          const shareUrl = window.location.href;
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(shareUrl)
-              .then(() => this.showToast('URL copied to clipboard!'))
-              .catch(() => this.showToast(`URL: ${shareUrl}`));
-          } else {
-            this.showToast(`URL: ${shareUrl}`);
-          }
-          this.audio.playPip();
-        });
-
-        // Modal State Toggle Switch
-        document.getElementById('modal-state-toggle').addEventListener('change', (e) => {
-          if (this.activeStall) {
-            this.toggleStallState(this.activeStall.id, e.target.checked ? 'online' : 'offline');
-          }
-        });
-      }
-
-      /**
-       * Toast Notification Deck
-       */
-      showToast(msg) {
-        const deck = document.getElementById('toast-deck');
-        const t = document.createElement('div');
-        t.className = 'glass-card px-4 py-2 rounded-2xl border border-cyan-400/40 text-white text-xs font-mono shadow-2xl flex items-center space-x-2 transform translate-y-4 opacity-0 transition-all duration-300';
-        t.innerHTML = `<i class="fa-solid fa-circle-info text-cyan-400"></i><span>${msg}</span>`;
-        deck.appendChild(t);
-
-        requestAnimationFrame(() => {
-          t.classList.remove('translate-y-4', 'opacity-0');
-        });
-
-        setTimeout(() => {
-          t.classList.add('-translate-y-2', 'opacity-0');
-          setTimeout(() => t.remove(), 350);
-        }, 3000);
-      }
-
-      /**
-       * Main Animation Frame Loop (60 FPS)
-       * Note: No particle updates, no floating drone calculations, no random floater math!
-       */
-      animate(now) {
-        if (!this.isWebGLRunning) return;
-        this.animationFrameId = requestAnimationFrame(this.animate);
-
-        // Update Damped Orbit Controls with bounded target
-        if (this.controls) {
-          this.clampControlsBounds();
-          this.controls.update();
-        }
-
-        // Subtle Architectural Storefront Illumination Breathing
-        if (this.stallsMap && now) {
-          const sec = now * 0.001;
-          this.stallsMap.forEach((stallObj) => {
-            if (stallObj !== this.hoveredStall && stallObj.data.status === 'online') {
-              const phase = stallObj.data.coords.x * 0.4 + stallObj.data.coords.z * 0.25;
-              const pulse = 0.85 + Math.sin(sec * 2.2 + phase) * 0.04;
-              stallObj.signMesh.material.emissiveIntensity = pulse;
-              if (stallObj.bladeSignMesh) {
-                stallObj.bladeSignMesh.material.emissiveIntensity = pulse;
-              }
-            }
-          });
-        }
-
-        // Render Clean Scene
-        if (this.renderer && this.scene && this.camera) {
-          this.renderer.render(this.scene, this.camera);
-        }
-      }
-    }
-
-    // Launch Application when DOM is loaded
-    window.addEventListener('DOMContentLoaded', () => {
-      window.NDB_APP = new Application3D();
-    });
-  </script>
+  <!-- 7. ARCHITECTURE SCRIPT (Modular Entry Point) -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
