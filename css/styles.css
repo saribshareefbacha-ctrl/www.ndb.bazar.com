@@ -1,0 +1,69 @@
+/* Custom Tailwind directives, glassmorphism utilities, & animations */
+* { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+body { margin: 0; padding: 0; background-color: #0a0e17; font-family: 'Outfit', sans-serif; color: #f1f5f9; overflow: hidden; }
+canvas#webgl-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; outline: none; display: block; }
+
+/* Glassmorphism Card Base */
+.glass-card { background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55); }
+.glass-card-glow { background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0, 229, 255, 0.35); box-shadow: 0 0 35px rgba(0, 229, 255, 0.15), 0 16px 48px rgba(0, 0, 0, 0.65); }
+.custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.custom-scroll::-webkit-scrollbar-track { background: rgba(10, 14, 23, 0.6); }
+.custom-scroll::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.35); border-radius: 9999px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.75); }
+
+/* Ultra-Modern Elite Glassmorphism Modal Redesign */
+#auth-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; background: rgba(9, 14, 26, 0.90); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); opacity: 0; pointer-events: none; transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+#auth-modal.modal-open { opacity: 1; pointer-events: auto; }
+#auth-card { position: relative; width: 100%; max-width: 480px; background: rgba(15, 22, 38, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 2.5rem; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.05); transform: scale(0.92) translateY(24px); transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease; opacity: 0; }
+#auth-modal.modal-open #auth-card { transform: scale(1) translateY(0); opacity: 1; }
+
+.auth-brand-mark { width: 48px; height: 48px; border-radius: 1rem; background: linear-gradient(135deg, #10b981 0%, #00e5ff 100%); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; font-size: 1.25rem; margin: 0 auto 1.5rem; box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.35); }
+
+/* Compact, Smart Form Fields */
+.auth-input { background: rgba(9, 14, 26, 0.60); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 1rem; padding: 0.75rem 1.25rem; color: #e2e8f0; width: 100%; font-family: 'Outfit', sans-serif; font-size: 0.875rem; transition: all 0.25s ease; }
+.auth-input::placeholder { color: #64748b; }
+.auth-input:focus { outline: none; border-color: rgba(16, 185, 129, 0.50); box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.50), 0 0 15px -5px rgba(16, 185, 129, 0.20); }
+
+/* Professional Sign In & Sign Up Buttons */
+.btn-primary { width: 100%; padding: 0.85rem; border-radius: 0.875rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #f8fafc; color: #0f172a; border: none; }
+.btn-primary:hover { background: #ffffff; transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.10); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-signup { width: 100%; padding: 0.85rem; border-radius: 0.875rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.10); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.30); }
+.btn-signup:hover { background: rgba(16, 185, 129, 0.20); border-color: rgba(16, 185, 129, 0.50); transform: translateY(-1px); }
+.btn-signup:active { transform: translateY(0); }
+
+/* Professional Google Auth Integration */
+.btn-google { width: 100%; padding: 0.85rem; border-radius: 0.875rem; font-weight: 500; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: rgba(255, 255, 255, 0.03); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.10); }
+.btn-google:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.20); }
+.google-svg { width: 20px; height: 20px; }
+
+.auth-divider { position: relative; margin: 1.5rem 0; }
+.auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(71, 85, 105, 0.40); }
+.auth-divider span { position: relative; background: rgba(15, 22, 38, 0.95); padding: 0 1rem; font-size: 0.65rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
+
+#auth-status { margin-top: 1.25rem; font-size: 0.65rem; font-weight: 500; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* Unified Tab Switching */
+.auth-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(71, 85, 105, 0.30); padding-bottom: 0.5rem; }
+.auth-tab { padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.2s; border-radius: 0.5rem; }
+.auth-tab.active { color: #00e5ff; border-bottom: 2px solid #00e5ff; background: rgba(0, 229, 255, 0.05); }
+.auth-view { display: none; }
+.auth-view.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Owner Panel (Hidden by default) */
+#owner-panel { display: none; position: fixed; inset: 0; z-index: 110; background: rgba(5,8,20,0.95); backdrop-filter: blur(15px); padding: 2rem; overflow-y: auto; custom-scroll; }
+#owner-panel.active { display: block; }
+
+/* Existing Styles */
+#stall-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 50; padding: 1rem; background: rgba(5, 8, 20, 0.72); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
+#stall-modal.modal-open { opacity: 1; pointer-events: auto; }
+#stall-modal-card { position: relative; width: 100%; max-width: 520px; max-height: 90dvh; display: flex; flex-direction: column; background: rgba(10, 16, 32, 0.90); backdrop-filter: blur(28px); border: 1px solid rgba(0, 229, 255, 0.28); border-radius: 1.5rem; box-shadow: 0 0 60px rgba(0, 229, 255, 0.10), 0 24px 64px rgba(0,0,0,0.75); transform: scale(0.93) translateY(16px); transition: transform 0.30s cubic-bezier(0.34, 1.52, 0.64, 1), opacity 0.28s ease; opacity: 0; overflow: hidden; }
+#stall-modal.modal-open #stall-modal-card { transform: scale(1) translateY(0); opacity: 1; }
+.modal-accent-bar { height: 3px; width: 100%; background: linear-gradient(90deg, #00e5ff 0%, #2563eb 60%, transparent 100%); }
+#canvas-container { position: absolute; inset: 0; w-full h-full z-0 overflow-hidden bg-[#0a0e17] transition-opacity duration-500; }
+#hud-tooltip { position: fixed; pointer-events: none; z-30; -translate-x-1/2 -translate-y-full mb-4 opacity-0 transition-opacity duration-150; }
+#ui-overlay { position: relative; z-10; w-full h-full pointer-events-none flex flex-col justify-between p-3 sm:p-5 md:p-6; }
+#fallback-2d-container { position: fixed; inset: 0; z-20; bg-[#0a0e17] overflow-y-auto hidden p-4 sm:p-8 md:p-12 custom-scroll; }
+#toast-deck { position: fixed; bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none; }

@@ -24,83 +24,27 @@
     }
   </script>
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+
   <!-- Three.js, OrbitControls, GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-  <!-- Firebase SDKs (v9 Compat or v8 CDN) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <!-- Firebase SDKs (v9 Compat CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
 
-  <style>
-    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
-    body { margin: 0; padding: 0; background-color: #0a0e17; font-family: 'Outfit', sans-serif; color: #f1f5f9; overflow: hidden; }
-    canvas#webgl-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; outline: none; display: block; }
-    .glass-card { background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55); }
-    .glass-card-glow { background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0, 229, 255, 0.35); box-shadow: 0 0 35px rgba(0, 229, 255, 0.15), 0 16px 48px rgba(0, 0, 0, 0.65); }
-    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scroll::-webkit-scrollbar-track { background: rgba(10, 14, 23, 0.6); }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.35); border-radius: 9999px; }
-    .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.75); }
-    .sign-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: shimmer 4s infinite linear; }
-    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
-
-    /* Unified Auth Modal (Ultra-Modern Elite Glassmorphism) */
-    #auth-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; background: rgba(9, 14, 26, 0.90); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); opacity: 0; pointer-events: none; transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-    #auth-modal.modal-open { opacity: 1; pointer-events: auto; }
-    #auth-card { position: relative; width: 100%; max-width: 480px; background: rgba(15, 22, 38, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 2.5rem; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.05); transform: scale(0.92) translateY(24px); transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease; opacity: 0; }
-    #auth-modal.modal-open #auth-card { transform: scale(1) translateY(0); opacity: 1; }
-    
-    .auth-brand-mark { width: 48px; height: 48px; border-radius: 1rem; background: linear-gradient(135deg, #10b981 0%, #00e5ff 100%); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; font-size: 1.25rem; margin: 0 auto 1.5rem; box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.35); }
-
-    .auth-input { background: rgba(9, 14, 26, 0.60); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 1rem; padding: 1rem 1.5rem; color: #e2e8f0; width: 100%; font-family: 'Outfit', sans-serif; font-size: 0.875rem; transition: all 0.25s ease; }
-    .auth-input::placeholder { color: #64748b; }
-    .auth-input:focus { outline: none; border-color: rgba(16, 185, 129, 0.50); box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.50), 0 0 15px -5px rgba(16, 185, 129, 0.20); }
-    
-    .btn-primary { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #f8fafc; color: #0f172a; border: none; }
-    .btn-primary:hover { background: #ffffff; transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.10); }
-    .btn-primary:active { transform: translateY(0); }
-
-    .btn-signup { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.10); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.30); }
-    .btn-signup:hover { background: rgba(16, 185, 129, 0.20); border-color: rgba(16, 185, 129, 0.50); transform: translateY(-1px); }
-    .btn-signup:active { transform: translateY(0); }
-
-    .btn-google { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 500; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: rgba(255, 255, 255, 0.03); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.10); }
-    .btn-google:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.20); }
-    .google-svg { width: 20px; height: 20px; }
-
-    .auth-divider { position: relative; margin: 2rem 0; }
-    .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(71, 85, 105, 0.40); }
-    .auth-divider span { position: relative; background: rgba(15, 22, 38, 0.95); padding: 0 1rem; font-size: 0.65rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
-
-    #auth-status { margin-top: 1.5rem; font-size: 0.65rem; font-weight: 500; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
-
-
-    /* Owner Panel (Hidden by default) */
-    #owner-panel { display: none; position: fixed; inset: 0; z-index: 110; background: rgba(5,8,20,0.95); backdrop-filter: blur(15px); padding: 2rem; overflow-y: auto; custom-scroll; }
-    #owner-panel.active { display: block; }
-
-    /* Existing Styles */
-    #stall-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 50; padding: 1rem; background: rgba(5, 8, 20, 0.72); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
-    #stall-modal.modal-open { opacity: 1; pointer-events: auto; }
-    #stall-modal-card { position: relative; width: 100%; max-width: 520px; max-height: 90dvh; display: flex; flex-direction: column; background: rgba(10, 16, 32, 0.90); backdrop-filter: blur(28px); border: 1px solid rgba(0, 229, 255, 0.28); border-radius: 1.5rem; box-shadow: 0 0 60px rgba(0, 229, 255, 0.10), 0 24px 64px rgba(0,0,0,0.75); transform: scale(0.93) translateY(16px); transition: transform 0.30s cubic-bezier(0.34, 1.52, 0.64, 1), opacity 0.28s ease; opacity: 0; overflow: hidden; }
-    #stall-modal.modal-open #stall-modal-card { transform: scale(1) translateY(0); opacity: 1; }
-    .modal-accent-bar { height: 3px; width: 100%; background: linear-gradient(90deg, #00e5ff 0%, #2563eb 60%, transparent 100%); }
-    #canvas-container { position: absolute; inset: 0; w-full h-full z-0 overflow-hidden bg-[#0a0e17] transition-opacity duration-500; }
-    #hud-tooltip { position: fixed; pointer-events: none; z-30; -translate-x-1/2 -translate-y-full mb-4 opacity-0 transition-opacity duration-150; }
-    #ui-overlay { position: relative; z-10; w-full h-full pointer-events-none flex flex-col justify-between p-3 sm:p-5 md:p-6; }
-    #fallback-2d-container { position: fixed; inset: 0; z-20; bg-[#0a0e17] overflow-y-auto hidden p-4 sm:p-8 md:p-12 custom-scroll; }
-    #toast-deck { position: fixed; bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none; }
-  </style>
 </head>
 <body class="h-full w-full overflow-hidden select-none">
 
-  <!-- 1. UNIFIED AUTH MODAL -->
-  <div id="auth-modal" class="modal-open">
+  <!-- 1. UNIFIED AUTH MODAL (Hidden on Initial Load) -->
+  <div id="auth-modal">
     <div id="auth-card">
-      <div class="text-center mb-8">
+      <div class="text-center mb-6">
         <div class="auth-brand-mark">
           <i class="fa-solid fa-shop text-black"></i>
         </div>
@@ -108,22 +52,38 @@
         <p class="text-slate-400 text-xs tracking-widest mt-1">Unified Security Interface</p>
       </div>
       
+      <!-- Unified Tab Switching -->
+      <div class="auth-tabs">
+        <div id="tab-login" class="auth-tab active">Sign In</div>
+        <div id="tab-signup" class="auth-tab">Sign Up</div>
+      </div>
+
       <div class="space-y-4">
-        <input type="email" id="auth-email" class="auth-input" placeholder="Corporate/Personal Email">
-        <input type="password" id="auth-password" class="auth-input" placeholder="Secure Password" type="password">
-        <button id="btn-login-standard" class="btn-primary">
-          <i class="fa-solid fa-key text-xs"></i> Sign In
-        </button>
-        <button id="btn-signup-standard" class="btn-signup">
-          <i class="fa-solid fa-user-plus text-xs"></i> Sign Up
-        </button>
+        <!-- Login View -->
+        <div id="view-login" class="auth-view active">
+          <input type="email" id="auth-email" class="auth-input" placeholder="Corporate/Personal Email">
+          <input type="password" id="auth-password" class="auth-input" placeholder="Secure Password">
+          <button id="btn-login-standard" class="btn-primary">
+            <i class="fa-solid fa-key text-xs"></i> Sign In (Standard)
+          </button>
+        </div>
+
+        <!-- Signup View -->
+        <div id="view-signup" class="auth-view">
+          <input type="email" id="signup-email" class="auth-input" placeholder="New Corporate/Personal Email">
+          <input type="password" id="signup-password" class="auth-input" placeholder="Create Secure Password">
+          <button id="btn-signup-standard" class="btn-signup">
+            <i class="fa-solid fa-user-plus text-xs"></i> Sign Up (New Account)
+          </button>
+        </div>
       </div>
 
       <div class="auth-divider"><span>Direct Access</span></div>
 
+      <!-- Genuine Branding & Refined Copywriting -->
       <button id="btn-login-google" class="btn-google">
-        <svg class="google-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l-6.85 6.85c-1.9-1.8-4.39-2.98-7.36-2.98-3.55 0-6.48 1.93-7.54 4.55h-7.84V9.5h13.38z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.44-4.55H24v9.08h12.71c-.58 2.99-2.46 5.63-5.17 7.36l6.85 6.85c4.01-3.71 6.34-9.01 6.34-15.34z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-3.01-.76-4.59s.28-3.14.76-4.59l-7.84-6.85C1.41 16.37 0 19.79 0 24.55s1.41 8.18 3.55 11.54l6.98-6.95z"/><path fill="#FBBC05" d="M24 44.75c2.97 0 5.68-.86 7.95-2.34l-6.85-6.85c-1.9 1.28-4.39 2.02-7.1 2.02-5.46 0-10.05-3.7-11.64-8.76h-7.84c1.59 5.06 6.18 8.76 11.64 8.76z"/><path fill="#34A853" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85 6.85c-1.9-1.8-4.39-2.98-7.36-2.98-3.55 0-6.48 1.93-7.54 4.55h-7.84V9.5h13.38z"/></svg>
-        Firebase Google Direct Login
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="google-svg" alt="Google">
+        Continue with Google
       </button>
 
       <div id="auth-status" class="text-center">System Ready • Waiting for Authentication</div>
@@ -208,26 +168,36 @@
   <!-- 4. UI OVERLAY -->
   <div id="ui-overlay" class="relative z-10 w-full h-full pointer-events-none flex flex-col justify-between p-3 sm:p-5 md:p-6">
     <header class="w-full flex flex-col md:flex-row items-center justify-between gap-3 pointer-events-auto">
-      <a href="#/" class="glass-card rounded-2xl px-5 py-2.5 flex items-center space-x-3 border border-white/10 hover:border-cyan-400/30 transition-all group w-full md:w-auto">
+      <a href="#" class="glass-card rounded-2xl px-5 py-2.5 flex items-center space-x-3 border border-white/10 hover:border-cyan-400/30 transition-all group w-full md:w-auto">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-base shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform"><i class="fa-solid fa-shop"></i></div>
         <span class="text-sm sm:text-base font-extrabold tracking-wide text-white font-mono uppercase">Nankana Digital Bazaar</span>
       </a>
-      <div class="glass-card rounded-2xl px-3 py-2 flex items-center space-x-2 border border-white/10 w-full md:w-auto max-w-2xl overflow-x-auto custom-scroll">
-        <div class="relative flex-shrink-0 w-36 sm:w-48"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="text" id="global-search" placeholder="Search pavilions..." class="w-full bg-slate-900/90 border border-slate-700/60 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors"></div>
-        <div class="flex items-center space-x-1.5 flex-nowrap" id="category-pills">
-          <button data-cat="all" class="cat-pill active px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all bg-cyan-500 text-black shadow-md shadow-cyan-500/25 whitespace-nowrap">All Stalls</button>
-          <button data-cat="Electronics" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Tech</button>
-          <button data-cat="Fashion" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Fashion</button>
-          <button data-cat="Organic" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Organic</button>
-          <button data-cat="Handicrafts" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Crafts</button>
-          <button data-cat="Cyber AI" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Services</button>
+      
+      <!-- Clean Navbar Action -->
+      <div class="flex items-center gap-3 pointer-events-auto">
+        <div class="glass-card rounded-2xl px-3 py-2 flex items-center space-x-2 border border-white/10 w-full md:w-auto max-w-xl overflow-x-auto custom-scroll">
+          <div class="relative flex-shrink-0 w-36 sm:w-48"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="text" id="global-search" placeholder="Search pavilions..." class="w-full bg-slate-900/90 border border-slate-700/60 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 transition-colors"></div>
+          <div class="flex items-center space-x-1.5 flex-nowrap" id="category-pills">
+            <button data-cat="all" class="cat-pill active px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all bg-cyan-500 text-black shadow-md shadow-cyan-500/25 whitespace-nowrap">All Stalls</button>
+            <button data-cat="Electronics" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Tech</button>
+            <button data-cat="Fashion" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Fashion</button>
+            <button data-cat="Organic" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Organic</button>
+            <button data-cat="Handicrafts" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Crafts</button>
+            <button data-cat="Cyber AI" class="cat-pill px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all whitespace-nowrap">Services</button>
+          </div>
         </div>
-      </header>
-      <footer class="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 pointer-events-auto">
-        <div class="text-xs text-slate-400 flex items-center space-x-2 glass-card px-4 py-2 rounded-xl border border-white/5"><span class="text-slate-200 font-medium font-sans">Nankana Digital Bazaar</span><span class="text-slate-600">•</span><span class="text-slate-400">Virtual Commercial Pavilions</span></div>
-        <div class="glass-card rounded-xl p-1.5 border border-white/5 flex items-center space-x-1.5 overflow-x-auto max-w-full sm:max-w-xl custom-scroll" id="quick-jump-bar"></div>
-      </footer>
-    </div>
+        <!-- Clean Navbar Action Button -->
+        <button id="btn-open-auth" class="px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-white text-xs font-mono border border-white/10 transition-all flex items-center gap-2">
+          <i class="fa-solid fa-user"></i> Get Started
+        </button>
+      </div>
+      
+    </header>
+    <footer class="w-full flex flex-col sm:flex-row items-center justify-between gap-2.5 pointer-events-auto">
+      <div class="text-xs text-slate-400 flex items-center space-x-2 glass-card px-4 py-2 rounded-xl border border-white/5"><span class="text-slate-200 font-medium font-sans">Nankana Digital Bazaar</span><span class="text-slate-600">•</span><span class="text-slate-400">Virtual Commercial Pavilions</span></div>
+      <div class="glass-card rounded-xl p-1.5 border border-white/5 flex items-center space-x-1.5 overflow-x-auto max-w-full sm:max-w-xl custom-scroll" id="quick-jump-bar"></div>
+    </footer>
+  </div>
 
   <!-- 5. STALL MODAL -->
   <div id="stall-modal" role="dialog" aria-modal="true" aria-labelledby="modal-name">
@@ -266,444 +236,7 @@
   <!-- Toast Deck -->
   <div id="toast-deck" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none"></div>
 
-  <!-- 7. ARCHITECTURE SCRIPT -->
-  <script>
-    // --- FIREBASE CONFIGURATION (Placeholder - Replace with actual keys) ---
-    const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "ndb-swiftstack.firebaseapp.com", projectId: "ndb-swiftstack", storageBucket: "ndb-swiftstack.appspot.com", messagingSenderId: "...", appId: "..." };
-    // firebase.initializeApp(firebaseConfig);
-    const auth = null; // firebase.auth();
-    const db = null; // firebase.firestore();
-
-    // --- MASTER OWNER WHITELIST ---
-    const MASTER_OWNERS = ['saribshareefbacha@gmail.com', 'swiftstackdigi01@gmail.com', 'saribjutt503@gmail.com'];
-
-    // --- MASTER DATA SCHEMA ---
-    const NDB_STALLS = [
-      { id: 'stall-1', name: 'Quantum Tech Pavilion', signTitle: 'QUANTUM TECH', category: 'Electronics', merchant: 'Al-Khawarizmi Systems', rating: 4.95, status: 'online', color: 0x00e5ff, accent: '#00e5ff', traffic: '24.1K', coords: { x: -25, z: -11 }, rotY: Math.PI * 0.15, description: 'Next-generation computing hardware, quantum microprocessors, holographic monitors, and neural interface terminals.', items: [{ name: 'Quantum Core Q-8', price: '1.25 ETH', tag: 'Hot' }, { name: 'HoloLens Retinal Pro', price: '0.80 ETH', tag: 'New' }, { name: 'Neural Link Terminal', price: '0.45 ETH', tag: 'Limited' }] },
-      { id: 'stall-2', name: 'Cyber Silk & Wearables', signTitle: 'NOOR APPAREL', category: 'Fashion', merchant: 'Noor Smart Apparel', rating: 4.88, status: 'online', color: 0xec4899, accent: '#ec4899', traffic: '19.4K', coords: { x: -13, z: -25 }, rotY: Math.PI * 0.35, description: 'Adaptive smart-textile garments woven with programmable photonic filaments and micro-thermal climate regulators.', items: [{ name: 'Photonic Silk Kurta', price: '0.30 ETH', tag: 'Featured' }, { name: 'Chroma Light Cloak', price: '0.50 ETH', tag: 'Trending' }, { name: 'Haptic Smart Gloves', price: '0.15 ETH', tag: 'Sale' }] },
-      { id: 'stall-3', name: 'Nankana Organic Flora', signTitle: 'NANKANA FLORA', category: 'Organic', merchant: 'Punjab AgriBio Cooperative', rating: 4.94, status: 'online', color: 0x10b981, accent: '#10b981', traffic: '16.8K', coords: { x: 13, z: -25 }, rotY: -Math.PI * 0.35, description: 'Authentic organic Kashmiri saffron, pure bio-honey, and hydroponic medicinal herbal extracts grown in solar biomes.', items: [{ name: 'Pure Solar Saffron (10g)', price: '0.18 ETH', tag: 'Certified' }, { name: 'Bio-Flora Honey Essence', price: '0.08 ETH', tag: 'Organic' }, { name: 'Herbal Elixir Concentrate', price: '0.12 ETH', tag: 'Pure' }] },
-      { id: 'stall-4', name: 'Heritage Craft Guild', signTitle: 'WAZIRABAD CRAFT', category: 'Handicrafts', merchant: 'Wazirabad Bladesmiths', rating: 4.98, status: 'online', color: 0xf59e0b, accent: '#f59e0b', traffic: '22.0K', coords: { x: 25, z: -11 }, rotY: -Math.PI * 0.15, description: 'Hand-forged Damascus steel folding blades, brass filigree candle lamps, and NFC-authenticated ceramic pottery.', items: [{ name: 'Damascus Laser Carver', price: '0.65 ETH', tag: 'Masterwork' }, { name: 'Filigree Brass Chandelier', price: '0.35 ETH', tag: 'Artisan' }, { name: 'NFC Glazed Terracotta Urn', price: '0.20 ETH', tag: 'Historic' }] },
-      { id: 'stall-5', name: 'Neural Cloud & AI Kiosk', signTitle: 'INDUS CLOUD AI', category: 'Cyber AI', merchant: 'Indus Data Foundry', rating: 4.86, status: 'online', color: 0x8b5cf6, accent: '#8b5cf6', traffic: '31.2K', coords: { x: 25, z: 12 }, rotY: -Math.PI * 0.85, description: 'Specialized LLM inference nodes, decentralized smart-contract security suites, and cold cryptostorage solutions.', items: [{ name: 'Dedicated Agent Pod', price: '1.80 ETH/mo', tag: 'Enterprise' }, { name: 'Zero-Knowledge Vault', price: '0.40 ETH', tag: 'High-Sec' }, { name: 'Audit Protocol v4', price: '0.90 ETH', tag: 'Verified' }] },
-      { id: 'stall-6', name: 'Karak Chai & Robo-Dhabba', signTitle: 'KARAK CHAI CAFE', category: 'Cyber AI', merchant: 'Nankana Street Labs', rating: 4.97, status: 'online', color: 0xf97316, accent: '#f97316', traffic: '42.6K', coords: { x: 13, z: 25 }, rotY: -Math.PI * 0.65, description: 'Robotic precision-steeped Karak tea, cardamom nitro beverages, and molecular street refreshments.', items: [{ name: 'Cardamom Nitro Chai', price: '0.01 ETH', tag: 'Best Seller' }, { name: 'Molecular Street Samosa', price: '0.03 ETH', tag: 'Crispy' }, { name: 'Saffron Lassi Brew', price: '0.02 ETH', tag: 'Chilled' }] },
-      { id: 'stall-7', name: 'Holowear Visual Studio', signTitle: 'MIRAGE OPTICS', category: 'Electronics', merchant: 'Mirage Optics Ltd.', rating: 4.79, status: 'offline', color: 0x3b82f6, accent: '#3b82f6', traffic: '11.4K', coords: { x: -13, z: 25 }, rotY: Math.PI * 0.65, description: 'Micro-projector contact lenses, volumetric display kiosks, and retinal glare-shield eyewear.', items: [{ name: 'Retinal AR Contact Lens', price: '0.95 ETH', tag: 'Wireless' }, { name: 'Holo-Cube Desk Projector', price: '0.48 ETH', tag: '4K Volumetric' }, { name: 'Glare Shield Visor', price: '0.14 ETH', tag: 'Durable' }] },
-      { id: 'stall-8', name: 'Aero Logistics Drone Port', signTitle: 'RAVI EXPRESS', category: 'Cyber AI', merchant: 'Ravi Express Skyways', rating: 4.91, status: 'online', color: 0x14b8a6, accent: '#14b8a6', traffic: '28.7K', coords: { x: -25, z: 12 }, rotY: -Math.PI * 0.85, description: 'Point-to-point automated courier dispatch and cargo transit servicing all bazaar sectors in under 8 minutes.', items: [{ name: 'Express Skyway Dispatch', price: '0.04 ETH', tag: 'Rapid' }, { name: 'Cargo Drone Rental', price: '0.45 ETH/day', tag: 'Payload' }, { name: 'Air-Beacon Transponder', price: '0.18 ETH', tag: 'IoT' }] }
-    ];
-
-    // --- SECURITY & AUTH MANAGER ---
-    class SecurityManager {
-      constructor(app) {
-        this.app = app;
-        this.role = 'customer'; // Default
-        this.userEmail = null;
-        this.init();
-      }
-
-      init() {
-        const btnGoogle = document.getElementById('btn-login-google');
-        const btnStandard = document.getElementById('btn-login-standard');
-        const btnSignup = document.getElementById('btn-signup-standard');
-        const authModal = document.getElementById('auth-modal');
-        const ownerPanel = document.getElementById('owner-panel');
-        const btnCloseOwner = document.getElementById('btn-close-owner');
-
-        btnGoogle.addEventListener('click', () => this.handleGoogleLogin());
-        btnStandard.addEventListener('click', () => this.handleStandardLogin());
-        btnSignup.addEventListener('click', () => this.handleStandardSignup());
-        btnCloseOwner.addEventListener('click', () => ownerPanel.classList.remove('active'));
-
-        // Firebase Auth Listeners (Mocked for logic demonstration)
-        // firebase.auth().onAuthStateChanged(user => this.onAuthStateChanged(user));
-      }
-
-      async handleGoogleLogin() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        try {
-          // Logic: firebase.auth().signInWithPopup(provider).catch(err => firebase.auth().signInWithRedirect(provider))
-          this.mockLoginSuccess('saribshareefbacha@gmail.com'); // Mock for demonstration
-        } catch (e) { console.error(e); }
-      }
-
-      async handleStandardLogin() {
-        const email = document.getElementById('auth-email').value;
-        const pass = document.getElementById('auth-password').value;
-        // Logic: firebase.auth().signInWithEmailAndPassword(email, pass)
-        this.mockLoginSuccess(email);
-      }
-
-      async handleStandardSignup() {
-        const email = document.getElementById('auth-email').value;
-        const pass = document.getElementById('auth-password').value;
-        // Logic: firebase.auth().createUserWithEmailAndPassword(email, pass)
-        this.app.showToast(`SIGNUP INITIATED: ${email}`);
-        // Mocking success for demonstration
-        this.mockLoginSuccess(email);
-      }
-
-      mockLoginSuccess(email) {
-        this.userEmail = email;
-        document.getElementById('auth-modal').classList.remove('modal-open');
-        
-        // Role Resolution Logic
-        if (MASTER_OWNERS.includes(email)) {
-          this.role = 'owner';
-          this.app.showToast(`MASTER OWNER AUTHENTICATED: ${email}`);
-          document.getElementById('owner-panel').classList.add('active');
-        } else {
-          // Fetch from Firestore (Mocked)
-          this.role = 'customer'; // Default
-          this.app.showToast(`Authenticated as ${this.role.toUpperCase()}`);
-        }
-        
-        this.app.applyRBAC(this.role);
-        document.getElementById('auth-status').textContent = `Authenticated: ${email} (${this.role})`;
-      }
-
-      onAuthStateChanged(user) {
-        if (user) {
-          this.userEmail = user.email;
-          if (MASTER_OWNERS.includes(user.email)) {
-            this.role = 'owner';
-            document.getElementById('owner-panel').classList.add('active');
-          } else {
-            // db.collection('users').doc(user.uid).get().then(doc => { this.role = doc.data()?.role || 'customer'; this.app.applyRBAC(this.role); })
-            this.role = 'customer';
-          }
-          document.getElementById('auth-modal').classList.remove('modal-open');
-        } else {
-          document.getElementById('auth-modal').classList.add('modal-open');
-        }
-      }
-    }
-
-    // --- TEXTURE & AUDIO FACTORIES ---
-    class TextureFactory {
-      static createPlazaPavers() { const c = document.createElement('canvas'); c.width = 512; c.height = 512; const ctx = c.getContext('2d'); ctx.fillStyle = '#111726'; ctx.fillRect(0, 0, 512, 512); ctx.strokeStyle = '#1b2336'; ctx.lineWidth = 4; const t = 64; for (let x = 0; x < 512; x += t) { for (let y = 0; y < 512; y += t) { const tone = 18 + Math.floor(Math.random() * 8); ctx.fillStyle = `rgb(${tone}, ${tone + 4}, ${tone + 12})`; ctx.fillRect(x + 2, y + 2, t - 4, t - 4); ctx.strokeRect(x, y, t, t); } } const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(16, 16); return tex; }
-      static createSignboard(name, category, colorHex, merchant) { const c = document.createElement('canvas'); c.width = 1024; c.height = 256; const ctx = c.getContext('2d'); const bg = ctx.createLinearGradient(0, 0, 1024, 0); bg.addColorStop(0, '#060a12'); bg.addColorStop(0.5, '#0c1322'); bg.addColorStop(1, '#060a12'); ctx.fillStyle = bg; ctx.fillRect(0, 0, 1024, 256); ctx.strokeStyle = colorHex; ctx.lineWidth = 10; ctx.strokeRect(8, 8, 1008, 240); ctx.fillStyle = colorHex; ctx.fillRect(40, 24, 210, 40); ctx.fillStyle = '#000000'; ctx.font = 'bold 22px "Space Grotesk", sans-serif'; ctx.textAlign = 'center'; ctx.fillText(category.toUpperCase(), 145, 52); ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.font = 'bold 74px "Outfit", sans-serif'; ctx.shadowColor = colorHex; ctx.shadowBlur = 16; ctx.fillText(name, 40, 150); ctx.shadowBlur = 0; ctx.fillStyle = '#94a3b8'; ctx.font = '500 24px "Space Grotesk", sans-serif'; ctx.fillText(`MERCHANT: ${merchant.toUpperCase()} • NANKANA BAZAAR`, 42, 212); ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(970, 48, 12, 0, Math.PI * 2); ctx.fill(); const tex = new THREE.CanvasTexture(c); tex.needsUpdate = true; return tex; }
-      static createBladeSign(title, colorHex) { const c = document.createElement('canvas'); c.width = 256; c.height = 256; const ctx = c.getContext('2d'); ctx.fillStyle = '#080c14'; ctx.fillRect(0, 0, 256, 256); ctx.strokeStyle = colorHex; ctx.lineWidth = 10; ctx.strokeRect(10, 10, 236, 236); ctx.fillStyle = colorHex; ctx.font = 'bold 68px "Space Grotesk", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; const monogram = title.split(' ').map(w => w[0]).join('').slice(0, 3); ctx.fillText(monogram, 128, 115); ctx.fillStyle = '#cbd5e1'; ctx.font = 'bold 22px "Outfit", sans-serif'; ctx.fillText('STORE', 128, 185); const tex = new THREE.CanvasTexture(c); tex.needsUpdate = true; return tex; }
-      static createFacadeTexture(colorHex) { const c = document.createElement('canvas'); c.width = 512; c.height = 512; const ctx = c.getContext('2d'); ctx.fillStyle = '#121927'; ctx.fillRect(0, 0, 512, 512); ctx.strokeStyle = '#080c14'; ctx.lineWidth = 6; const rh = 64; for (let y = 0; y < 512; y += rh) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke(); const off = (y / rh) % 2 === 0 ? 0 : 128; for (let x = off; x < 512; x += 256) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + rh); ctx.stroke(); ctx.fillStyle = '#223046'; ctx.fillRect(x + 6, y + 6, 4, 4); ctx.fillRect(x + 246, y + 6, 4, 4); } } const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2, 2); return tex; }
-      static createWoodSlats() { const c = document.createElement('canvas'); c.width = 256; c.height = 256; const ctx = c.getContext('2d'); ctx.fillStyle = '#181f2f'; ctx.fillRect(0, 0, 256, 256); ctx.fillStyle = '#101624'; for (let y = 0; y < 256; y += 16) ctx.fillRect(0, y, 256, 3); const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2, 2); return tex; }
-    }
-    class AudioSynth {
-      constructor() { this.enabled = true; this.ctx = null; }
-      ensure() { if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) { const C = window.AudioContext || window.webkitAudioContext; this.ctx = new C(); } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); }
-      playPip() { if (!this.enabled) return; this.ensure(); if (!this.ctx) return; try { const o = this.ctx.createOscillator(), g = this.ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(500, this.ctx.currentTime); o.frequency.exponentialRampToValueAtTime(750, this.ctx.currentTime + 0.05); g.gain.setValueAtTime(0.02, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05); o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.05); } catch (e) {} }
-      playFocus() { if (!this.enabled) return; this.ensure(); if (!this.ctx) return; try { const o = this.ctx.createOscillator(), g = this.ctx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(320, this.ctx.currentTime); o.frequency.exponentialRampToValueAtTime(780, this.ctx.currentTime + 0.12); g.gain.setValueAtTime(0.05, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12); o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.12); } catch (e) {} }
-      playToggle() { if (!this.enabled) return; this.ensure(); if (!this.ctx) return; try { const o = this.ctx.createOscillator(), g = this.ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(620, this.ctx.currentTime); o.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.1); g.gain.setValueAtTime(0.035, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1); o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime + 0.1); } catch (e) {} }
-    }
-
-    // --- CORE APPLICATION ---
-    class Application3D {
-      constructor() {
-        this.container = document.getElementById('canvas-container');
-        this.canvas = document.getElementById('webgl-canvas');
-        this.fallbackContainer = document.getElementById('fallback-2d-container');
-        this.audio = new AudioSynth();
-        this.security = new SecurityManager(this);
-        this.renderer = null; this.scene = null; this.camera = null; this.controls = null; this.clock = new THREE.Clock();
-        this.isWebGLRunning = false; this.isDaylight = false; this.animationFrameId = null;
-        this.stallsMap = new Map(); this.hitMeshes = []; this.raycaster = new THREE.Raycaster();
-        this.pointer = new THREE.Vector2(-999, -999); this.hoveredStall = null; this.activeStall = null;
-        this.init();
-      }
-
-      init() {
-        this.setupHashRouter();
-        this.render2DCatalogGrid();
-        this.setupUIHandlers();
-        this.bootWebGL();
-      }
-
-      bootWebGL() {
-        try {
-          const gl = this.canvas.getContext('webgl2') || this.canvas.getContext('webgl') || this.canvas.getContext('experimental-webgl');
-          if (!gl) throw new Error("WebGL context creation returned null.");
-          this.canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); this.handleContextLost('WebGL graphics context was lost.'); }, false);
-          this.canvas.addEventListener('webglcontextrestored', () => { this.handleContextRestored(); }, false);
-          this.setupRenderer(); this.setupScene(); this.setupCamera(); this.setupLighting(); this.setupControls();
-          this.setupRealisticPlaza(); this.setupArchitecturalPavilions(); this.setup3DInteractions();
-          this.isWebGLRunning = true; this.container.classList.remove('opacity-0', 'pointer-events-none');
-          this.clock.start(); this.animate(); this.handleHashChange();
-        } catch (error) { console.warn("[NDB SwiftStack] WebGL Fallback", error); this.handleContextLost(error.message); }
-      }
-
-      handleContextLost(reason) {
-        this.isWebGLRunning = false; if (this.animationFrameId) { cancelAnimationFrame(this.animationFrameId); this.animationFrameId = null; }
-        this.container.classList.add('opacity-0', 'pointer-events-none'); this.fallbackContainer.classList.remove('hidden');
-        const banner = document.getElementById('fallback-reason-banner'); const text = document.getElementById('fallback-reason-text');
-        if (banner && text) { text.textContent = ` ${reason || 'Hardware acceleration unavailable.'} Seamless 2D grid directory active.`; banner.classList.remove('hidden'); }
-        this.showToast('Switched to 2D Fallback Grid');
-      }
-
-      handleContextRestored() { const banner = document.getElementById('fallback-reason-banner'); if (banner) banner.classList.add('hidden'); this.bootWebGL(); }
-
-      setupRenderer() { if (this.renderer) this.renderer.dispose(); this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true, powerPreference: "high-performance" }); this.renderer.setSize(window.innerWidth, window.innerHeight); this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; this.renderer.outputEncoding = THREE.sRGBEncoding; this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.1; }
-
-      setupScene() { this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0x0a0e17); this.scene.fog = new THREE.Fog(0x0a0e17, 35, 100); }
-
-      setupCamera() { const aspect = window.innerWidth / window.innerHeight; const fov = aspect < 1 ? 48 : 38; this.camera = new THREE.PerspectiveCamera(fov, aspect, 0.5, 105); this.resetCamera(false); }
-
-      resetCamera(animated = true) { const targetPos = { x: 26, y: 15, z: 28 }, targetLook = { x: 0, y: 1.8, z: 0 }; if (!animated) { this.camera.position.set(targetPos.x, targetPos.y, targetPos.z); if (this.controls) this.controls.target.set(targetLook.x, targetLook.y, targetLook.z); return; } gsap.to(this.camera.position, { ...targetPos, duration: 1.4, ease: "power2.inOut" }); gsap.to(this.controls.target, { ...targetLook, duration: 1.4, ease: "power2.inOut" }); }
-
-      setupLighting() {
-        this.lights = {};
-        this.lights.hemi = new THREE.HemisphereLight(0x8ea2be, 0x111724, 0.95); this.lights.hemi.position.set(0, 50, 0); this.scene.add(this.lights.hemi);
-        this.lights.ambient = new THREE.AmbientLight(0x0f172a, 0.4); this.scene.add(this.lights.ambient);
-        this.lights.sun = new THREE.DirectionalLight(0xfff5e6, 1.65); this.lights.sun.position.set(34, 48, 28); this.lights.sun.castShadow = true;
-        this.lights.sun.shadow.mapSize.set(2048, 2048); this.lights.sun.shadow.camera.set(-38, 38, 38, -38, 1.0, 120);
-        this.lights.sun.shadow.bias = -0.0003; this.lights.sun.shadow.normalBias = 0.02; this.lights.sun.shadow.radius = 3.5;
-        this.scene.add(this.lights.sun);
-      }
-
-      setupControls() {
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true; this.controls.dampingFactor = 0.05; this.controls.screenSpacePanning = true; this.controls.panSpeed = 0.75;
-        this.controls.minDistance = 9; this.controls.maxDistance = 46;
-        this.controls.minPolarAngle = Math.PI * 0.15; this.controls.maxPolarAngle = Math.PI / 2 - 0.06;
-        this.controls.target.set(0, 1.8, 0);
-        this.controls.addEventListener('change', () => this.clampControlsBounds());
-      }
-
-      clampControlsBounds() {
-        if (!this.controls) return; const d = Math.hypot(this.controls.target.x, this.controls.target.z);
-        if (d > 22) { const f = 22 / d; this.controls.target.x *= f; this.controls.target.z *= f; }
-        this.controls.target.y = THREE.MathUtils.clamp(this.controls.target.y, 0.8, 3.5);
-      }
-
-      setupRealisticPlaza() {
-        const pt = TextureFactory.createPlazaPavers();
-        const g = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), new THREE.MeshStandardMaterial({ map: pt, roughness: 0.75, metalness: 0.15 }));
-        g.rotation.x = -Math.PI / 2; g.position.y = -0.01; g.receiveShadow = true; this.scene.add(g);
-        const curb = new THREE.Mesh(new THREE.CylinderGeometry(11, 11.4, 0.45, 48), new THREE.MeshStandardMaterial({ color: 0x1e2638, roughness: 0.6, metalness: 0.2 })); curb.position.y = 0.22; curb.receiveShadow = true; this.scene.add(curb);
-        const walk = new THREE.Mesh(new THREE.RingGeometry(8.5, 10.8, 48), new THREE.MeshStandardMaterial({ color: 0x273349, roughness: 0.45, metalness: 0.3, side: THREE.DoubleSide })); walk.rotation.x = -Math.PI / 2; walk.position.y = 0.46; walk.receiveShadow = true; this.scene.add(walk);
-        const planter = new THREE.Mesh(new THREE.CylinderGeometry(6.5, 6.8, 0.65, 36), new THREE.MeshStandardMaterial({ color: 0x182030, roughness: 0.8 })); planter.position.y = 0.55; planter.receiveShadow = true; this.scene.add(planter);
-        const soil = new THREE.Mesh(new THREE.CylinderGeometry(6.3, 6.3, 0.1, 36), new THREE.MeshStandardMaterial({ color: 0x0a1410, roughness: 0.9 })); soil.position.y = 0.9; this.scene.add(soil);
-        const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 4.5, 16), new THREE.MeshStandardMaterial({ color: 0x2d3748, metalness: 0.85, roughness: 0.2 })); lamp.position.y = 2.8; lamp.castShadow = true; this.scene.add(lamp);
-        const lum = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.3, 0.35, 16), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfff3db, emissiveIntensity: 0.35, roughness: 0.2 })); lum.position.y = 4.8; this.scene.add(lum);
-        for (let i = 0; i < 16; i++) {
-          const ang = (i / 16) * Math.PI * 2, bx = Math.cos(ang) * 15.5, bz = Math.sin(ang) * 15.5;
-          const bm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.7, 12), new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8 })); bm.position.set(bx, 0.35, bz); bm.receiveShadow = true; this.scene.add(bm);
-          const bc = new THREE.Mesh(new THREE.CylinderGeometry(0.082, 0.082, 0.1, 12), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffeedd, emissiveIntensity: 0.2 })); bc.position.set(bx, 0.65, bz); this.scene.add(bc);
-        }
-      }
-
-      setupArchitecturalPavilions() {
-        this.hitMeshes = []; this.stallsMap.clear(); const wood = TextureFactory.createWoodSlats();
-        NDB_STALLS.forEach(s => {
-          const g = new THREE.Group(); g.position.set(s.coords.x, 0, s.coords.z); g.rotation.y = s.rotY || 0;
-          const isOnline = s.status === 'online', col = new THREE.Color(s.color), ft = TextureFactory.createFacadeTexture(s.accent);
-          const plinth = new THREE.Mesh(new THREE.BoxGeometry(7, 0.4, 5.4), new THREE.MeshStandardMaterial({ color: 0x182030, roughness: 0.7, metalness: 0.25 })); plinth.position.set(0, 0.2, 0); plinth.receiveShadow = true; plinth.castShadow = true; g.add(plinth);
-          const mat = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.04, 1.2), new THREE.MeshStandardMaterial({ color: 0x0f1523, roughness: 0.8 })); mat.position.set(0, 0.42, 2.1); mat.receiveShadow = true; g.add(mat);
-          const back = new THREE.Mesh(new THREE.BoxGeometry(6.6, 3.8, 0.25), new THREE.MeshStandardMaterial({ map: wood, roughness: 0.75, metalness: 0.1 })); back.position.set(0, 2.1, -2.35); back.castShadow = true; back.receiveShadow = true; g.add(back);
-          [-3.25, 3.25].forEach(x => { const sw = new THREE.Mesh(new THREE.BoxGeometry(0.25, 3.8, 4.8), new THREE.MeshStandardMaterial({ map: ft, roughness: 0.55, metalness: 0.4 })); sw.position.set(x, 2.1, 0); sw.castShadow = true; sw.receiveShadow = true; g.add(sw); });
-          [-2.4, 2.4].forEach(x => { const p = new THREE.Mesh(new THREE.BoxGeometry(1.6, 3.8, 0.35), new THREE.MeshStandardMaterial({ map: ft, roughness: 0.45, metalness: 0.5 })); p.position.set(x, 2.1, 2.45); p.castShadow = true; p.receiveShadow = true; g.add(p); });
-          const transom = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.8, 0.06), new THREE.MeshStandardMaterial({ color: 0xe0f7fa, transparent: true, opacity: 0.35, roughness: 0.1, metalness: 0.9 })); transom.position.set(0, 3.4, 2.4); g.add(transom);
-          const hm = new THREE.Mesh(new THREE.BoxGeometry(3.25, 0.1, 0.12), new THREE.MeshStandardMaterial({ color: 0x1e2738, metalness: 0.9, roughness: 0.2 })); hm.position.set(0, 3.0, 2.42); g.add(hm);
-          [-1.6, 1.6].forEach(jx => { const j = new THREE.Mesh(new THREE.BoxGeometry(0.1, 3.8, 0.2), new THREE.MeshStandardMaterial({ color: 0x1e2738, metalness: 0.9, roughness: 0.2 })); j.position.set(jx, 2.1, 2.42); g.add(j); });
-          const roof = new THREE.Mesh(new THREE.BoxGeometry(7.4, 0.4, 5.8), new THREE.MeshStandardMaterial({ color: 0x161d2a, metalness: 0.75, roughness: 0.3 })); roof.position.set(0, 4.0, 0.1); roof.castShadow = true; roof.receiveShadow = true; g.add(roof);
-          const casing = new THREE.Mesh(new THREE.BoxGeometry(6.4, 1.35, 0.3), new THREE.MeshStandardMaterial({ color: 0x0f1522, metalness: 0.85, roughness: 0.3 })); casing.position.set(0, 4.5, 2.75); g.add(casing);
-          const stex = TextureFactory.createSignboard(s.signTitle, s.category, s.accent, s.merchant);
-          const smesh = new THREE.Mesh(new THREE.PlaneGeometry(6.25, 1.25), new THREE.MeshStandardMaterial({ map: stex, emissiveMap: stex, emissive: isOnline ? new THREE.Color(0xffffff) : new THREE.Color(0x222222), emissiveIntensity: isOnline ? 0.85 : 0.05, roughness: 0.15, metalness: 0.05 })); smesh.position.set(0, 4.5, 2.92); g.add(smesh);
-          const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.1, 8), new THREE.MeshStandardMaterial({ color: 0x1e2738, metalness: 0.9, roughness: 0.2 })); arm.rotation.z = Math.PI / 2; arm.position.set(3.55, 3.4, 2.45); g.add(arm);
-          const btex = TextureFactory.createBladeSign(s.signTitle, s.accent);
-          const bmesh = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.85, 0.1), new THREE.MeshStandardMaterial({ map: btex, emissiveMap: btex, emissive: isOnline ? new THREE.Color(0xffffff) : new THREE.Color(0x222222), emissiveIntensity: isOnline ? 0.85 : 0.05, roughness: 0.2 })); bmesh.position.set(3.8, 3.0, 2.45); g.add(bmesh);
-          const counter = new THREE.Mesh(new THREE.BoxGeometry(5.4, 1.1, 1.4), new THREE.MeshStandardMaterial({ color: 0x1a2336, roughness: 0.45, metalness: 0.35 })); counter.position.set(0, 0.95, 0.8); counter.castShadow = true; counter.receiveShadow = true; g.add(counter);
-          const top = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.08, 1.6), new THREE.MeshStandardMaterial({ color: 0x27364d, roughness: 0.2, metalness: 0.2 })); top.position.set(0, 1.54, 0.8); top.castShadow = true; top.receiveShadow = true; g.add(top);
-          const showcase = new THREE.Mesh(new THREE.BoxGeometry(4.8, 0.75, 1.1), new THREE.MeshStandardMaterial({ color: 0xe0f7fa, transparent: true, opacity: 0.35, roughness: 0.1, metalness: 0.9 })); showcase.position.set(0, 1.95, 0.8); g.add(showcase);
-          const pmat1 = new THREE.MeshStandardMaterial({ color: s.color, metalness: 0.6, roughness: 0.25 }), pmat2 = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.8, roughness: 0.2 });
-          for (let pi = -1.8; pi <= 1.8; pi += 0.9) { const pm = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.28, 0.35), pmat1); pm.position.set(pi, 1.76, 0.8); g.add(pm); const pc = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.35, 12), pmat2); pc.position.set(pi + 0.35, 1.76, 0.7); g.add(pc); }
-          const fixtures = [-1.6, 0, 1.6].map(fx => { const fix = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.05, 16), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: isOnline ? 0xfff4e0 : 0x222222, emissiveIntensity: isOnline ? 0.75 : 0.05 })); fix.position.set(fx, 3.75, 0.8); g.add(fix); return fix; });
-          const led = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.04, 12), new THREE.MeshBasicMaterial({ color: isOnline ? 0x10b981 : 0x475569 })); led.rotation.x = Math.PI / 2; led.position.set(2.8, 2.6, 2.65); g.add(led);
-          const hit = new THREE.Mesh(new THREE.BoxGeometry(7.2, 5.0, 5.6), new THREE.MeshBasicMaterial({ visible: false })); hit.position.set(0, 2.5, 0.2); hit.userData = { stallId: s.id }; g.add(hit);
-          this.hitMeshes.push(hit); this.stallsMap.set(s.id, { data: s, group: g, signMesh: smesh, bladeSignMesh: bmesh, fixtureMat: fixtures[0].material, ledMesh: led, hitMesh: hit });
-          this.scene.add(g);
-        });
-      }
-
-      setup3DInteractions() {
-        window.addEventListener('resize', () => this.onResize());
-        window.addEventListener('pointermove', (e) => this.onPointerMove(e));
-        this.canvas.addEventListener('click', () => this.onPointerClick());
-        this.canvas.addEventListener('touchend', (e) => { if (e.changedTouches.length > 0) { const t = e.changedTouches[0]; this.pointer.set((t.clientX / window.innerWidth) * 2 - 1, -(t.clientY / window.innerHeight) * 2 + 1); this.performRaycast(true); } });
-      }
-
-      onResize() { if (!this.renderer || !this.camera) return; const w = window.innerWidth, h = window.innerHeight, a = w / h; this.camera.aspect = a; this.camera.fov = a < 1 ? 48 : 38; this.camera.updateProjectionMatrix(); this.renderer.setSize(w, h); this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); }
-
-      onPointerMove(e) {
-        this.pointer.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
-        const tip = document.getElementById('hud-tooltip'); tip.style.left = `${e.clientX}px`; tip.style.top = `${e.clientY}px`;
-        if (this.isWebGLRunning) this.performRaycast(false);
-      }
-
-      onPointerClick() { if (this.isWebGLRunning) this.performRaycast(true); }
-
-      performRaycast(isClick) {
-        if (!this.camera) return; this.raycaster.setFromCamera(this.pointer, this.camera);
-        const hits = this.raycaster.intersectObjects(this.hitMeshes);
-        if (hits.length > 0) {
-          const id = hits[0].object.userData.stallId, obj = this.stallsMap.get(id);
-          if (isClick) { window.location.hash = `#/stall/${id}`; return; }
-          if (this.hoveredStall !== obj) {
-            this.clearHover(); this.hoveredStall = obj; document.body.style.cursor = 'pointer';
-            if (obj.fixtureMat) gsap.to(obj.fixtureMat, { emissiveIntensity: 1.0, duration: 0.25 });
-            gsap.to(obj.signMesh.material, { emissiveIntensity: 1.1, duration: 0.25 });
-            if (obj.bladeSignMesh) gsap.to(obj.bladeSignMesh.material, { emissiveIntensity: 1.1, duration: 0.25 });
-            const tip = document.getElementById('hud-tooltip'); document.getElementById('hud-title').textContent = obj.data.name;
-            document.getElementById('hud-category').textContent = `${obj.data.category} • ${obj.data.status.toUpperCase()}`;
-            const dot = document.getElementById('hud-status-dot'); dot.className = obj.data.status === 'online' ? 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping' : 'w-2.5 h-2.5 rounded-full bg-slate-500';
-            tip.style.opacity = '1'; this.audio.playPip();
-          }
-        } else if (!isClick && this.hoveredStall) this.clearHover();
-      }
-
-      clearHover() {
-        if (this.hoveredStall) {
-          const isOnline = this.hoveredStall.data.status === 'online';
-          if (this.hoveredStall.fixtureMat) gsap.to(this.hoveredStall.fixtureMat, { emissiveIntensity: isOnline ? 0.75 : 0.05, duration: 0.3 });
-          gsap.to(this.hoveredStall.signMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.08, duration: 0.3 });
-          if (this.hoveredStall.bladeSignMesh) gsap.to(this.hoveredStall.bladeSignMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.05, duration: 0.3 });
-          this.hoveredStall = null; document.body.style.cursor = 'default'; document.getElementById('hud-tooltip').style.opacity = '0';
-        }
-      }
-
-      focusOnStall(stallId) {
-        const obj = this.stallsMap.get(stallId), data = NDB_STALLS.find(s => s.id === stallId);
-        if (!data) return; this.activeStall = data; this.audio.playFocus();
-        if (this.isWebGLRunning && obj && this.controls) {
-          const pos = data.coords, rotY = data.rotY || 0, dist = 13.5, camX = pos.x + Math.sin(rotY) * dist, camZ = pos.z + Math.cos(rotY) * dist, camY = 3.8;
-          gsap.to(this.controls.target, { x: pos.x, y: 2.2, z: pos.z, duration: 1.4, ease: "power2.inOut" });
-          gsap.to(this.camera.position, { x: camX, y: camY, z: camZ, duration: 1.6, ease: "power2.inOut" });
-        }
-        this.openModal(data);
-      }
-
-      openModal(data) {
-        document.getElementById('modal-name').textContent = data.name;
-        document.getElementById('modal-merchant').innerHTML = `Merchant: <span class="text-cyan-300 font-medium">${data.merchant}</span>`;
-        document.getElementById('modal-cat').textContent = data.category;
-        document.getElementById('modal-desc').textContent = data.description;
-        document.getElementById('modal-rating').textContent = data.rating;
-        document.getElementById('modal-traffic').textContent = data.traffic;
-        const isOnline = data.status === 'online';
-        const toggle = document.getElementById('modal-state-toggle'); toggle.checked = isOnline;
-        const pill = document.getElementById('modal-status-pill'), stext = document.getElementById('modal-status-text');
-        if (isOnline) { pill.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'; stext.textContent = 'Store Open'; }
-        else { pill.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-slate-700/50 text-slate-400 border border-slate-600'; stext.textContent = 'Store Closed'; }
-        const list = document.getElementById('modal-items'); list.innerHTML = ''; document.getElementById('modal-item-count').textContent = `${data.items.length} Products`;
-        data.items.forEach(p => { const r = document.createElement('div'); r.className = 'flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/80 border border-white/5 hover:border-cyan-400/30 transition-all'; r.innerHTML = `<div><div class="text-xs font-semibold text-white">${p.name}</div><span class="text-[10px] text-cyan-400 font-mono">${p.tag}</span></div><div class="flex items-center gap-2"><span class="text-xs font-mono font-bold text-amber-300">${p.price}</span><button class="btn-buy px-2.5 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-[10px] uppercase font-mono" data-name="${p.name}">Inquire</button></div>`; list.appendChild(r); });
-        list.querySelectorAll('.btn-buy').forEach(b => { b.addEventListener('click', e => { e.stopPropagation(); this.showToast(`Order initiated for ${b.getAttribute('data-name')}`); this.audio.playToggle(); }); });
-        document.getElementById('stall-modal').classList.add('modal-open');
-      }
-
-      toggleStallState(stallId, newStatus) {
-        const data = NDB_STALLS.find(s => s.id === stallId); if (!data) return; data.status = newStatus; const isOnline = newStatus === 'online';
-        if (this.isWebGLRunning && this.stallsMap.has(stallId)) {
-          const obj = this.stallsMap.get(stallId); gsap.to(obj.signMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.08, duration: 0.5 });
-          if (obj.bladeSignMesh) gsap.to(obj.bladeSignMesh.material, { emissiveIntensity: isOnline ? 0.85 : 0.05, duration: 0.5 });
-          if (obj.fixtureMat) { obj.fixtureMat.emissive.setHex(isOnline ? 0xfff4e0 : 0x222222); obj.fixtureMat.emissiveIntensity = isOnline ? 0.75 : 0.05; }
-          obj.ledMesh.material.color.setHex(isOnline ? 0x10b981 : 0x475569);
-        }
-        const pill = document.getElementById('modal-status-pill'), stext = document.getElementById('modal-status-text');
-        if (isOnline) { pill.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'; stext.textContent = 'Store Open'; }
-        else { pill.className = 'flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-slate-700/50 text-slate-400 border border-slate-600'; stext.textContent = 'Store Closed'; }
-        this.render2DCatalogGrid(); this.audio.playToggle(); this.showToast(`${data.name}: ${isOnline ? 'STORE OPEN' : 'STORE CLOSED'}`);
-      }
-
-      applyRBAC(role) {
-        // Principal Architect RBAC Implementation
-        const ownerPanel = document.getElementById('owner-panel');
-        if (role === 'owner') { ownerPanel.classList.add('active'); } else { ownerPanel.classList.remove('active'); }
-        // Admin, Shopkeeper, Staff, Maintenance logic would go here to restrict/reveal specific DOM elements
-        this.render2DCatalogGrid();
-      }
-
-      setupHashRouter() { window.addEventListener('hashchange', () => this.handleHashChange()); }
-
-      handleHashChange() {
-        const h = window.location.hash || '#/';
-        if (h === '#/' || h === '' || h === '#') { document.getElementById('stall-modal').classList.remove('modal-open'); if (this.isWebGLRunning) this.fallbackContainer.classList.add('hidden'); }
-        else if (h === '#/catalog' || h === '#/directory') { this.render2DCatalogGrid(); this.fallbackContainer.classList.remove('hidden'); }
-        else if (h.startsWith('#/stall/')) { this.focusOnStall(h.replace('#/stall/', '').trim()); }
-      }
-
-      setupUIHandlers() {
-        const bar = document.getElementById('quick-jump-bar'); bar.innerHTML = '';
-        NDB_STALLS.forEach(s => { const a = document.createElement('a'); a.href = `#/stall/${s.id}`; a.className = 'flex-shrink-0 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-cyan-500 hover:text-black border border-white/5 text-xs text-slate-300 font-medium transition-all flex items-center space-x-2'; a.innerHTML = `<span class="w-2 h-2 rounded-full" style="background-color: ${s.accent};"></span><span>${s.name.split(' ')[0]}</span>`; bar.appendChild(a); });
-        const catCont = document.getElementById('catalog-2d-filters'); catCont.innerHTML = '';
-        ['all', 'Electronics', 'Fashion', 'Organic', 'Handicrafts', 'Cyber AI'].forEach(cat => {
-          const btn = document.createElement('button'); btn.className = `px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${cat === 'all' ? 'bg-cyan-500 text-black font-bold' : 'bg-slate-900 text-slate-300 hover:text-white border border-white/5'}`; btn.textContent = cat === 'all' ? 'All Pavilions' : cat;
-          btn.addEventListener('click', () => { catCont.querySelectorAll('button').forEach(b => { b.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-slate-900 text-slate-300 hover:text-white border border-white/5'; }); btn.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-cyan-500 text-black font-bold'; this.render2DCatalogGrid(cat, document.getElementById('global-search').value); this.audio.playPip(); });
-          catCont.appendChild(btn);
-        });
-        const search = document.getElementById('global-search'); search.addEventListener('input', (e) => { const ac = document.querySelector('.cat-pill.active')?.getAttribute('data-cat') || 'all'; if (this.isWebGLRunning) this.filter3DScene(ac, e.target.value); this.render2DCatalogGrid(ac, e.target.value); });
-        document.querySelectorAll('.cat-pill').forEach(p => { p.addEventListener('click', () => { document.querySelectorAll('.cat-pill').forEach(b => { b.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-slate-900 text-slate-300 hover:text-white border border-white/5'; }); p.className = 'px-3 py-1.5 rounded-xl text-xs font-mono transition-all bg-cyan-500 text-black font-bold'; const cat = p.getAttribute('data-cat'); if (this.isWebGLRunning) this.filter3DScene(cat, search.value); this.render2DCatalogGrid(cat, search.value); this.audio.playPip(); }); });
-        const btnSwitch = document.getElementById('btn-switch-to-3d'); if (btnSwitch) btnSwitch.addEventListener('click', () => window.location.hash = '#/');
-        const btnRecover = document.getElementById('btn-try-recovering-webgl'); if (btnRecover) btnRecover.addEventListener('click', () => this.bootWebGL());
-        const closeModal = () => { document.getElementById('stall-modal').classList.remove('modal-open'); this.audio.playPip(); };
-        document.getElementById('btn-close-modal').addEventListener('click', closeModal); document.getElementById('btn-close-modal-footer').addEventListener('click', closeModal);
-        document.getElementById('stall-modal').addEventListener('click', (e) => { if (e.target === document.getElementById('stall-modal')) closeModal(); });
-        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-        document.getElementById('btn-modal-share').addEventListener('click', () => { const url = window.location.href; if (navigator.clipboard) { navigator.clipboard.writeText(url).then(() => this.showToast('URL copied to clipboard!')).catch(() => this.showToast(`URL: ${url}`)); } else { this.showToast(`URL: ${url}`); } this.audio.playPip(); });
-        document.getElementById('modal-state-toggle').addEventListener('change', (e) => { if (this.activeStall) this.toggleStallState(this.activeStall.id, e.target.checked ? 'online' : 'offline'); });
-        document.getElementById('btn-close-owner').addEventListener('click', () => document.getElementById('owner-panel').classList.remove('active'));
-        // Owner Master Toggle Logic
-        document.getElementById('owner-master-toggle').addEventListener('change', (e) => {
-          const status = e.target.checked ? 'online' : 'offline';
-          NDB_STALLS.forEach(s => this.toggleStallState(s.id, status));
-          this.showToast(`GLOBAL SYNC: All stalls set to ${status.toUpperCase()}`);
-        });
-      }
-
-      showToast(msg) {
-        const deck = document.getElementById('toast-deck'), t = document.createElement('div');
-        t.className = 'glass-card px-4 py-2 rounded-2xl border border-cyan-400/40 text-white text-xs font-mono shadow-2xl flex items-center space-x-2 transform translate-y-4 opacity-0 transition-all duration-300';
-        t.innerHTML = `<i class="fa-solid fa-circle-info text-cyan-400"></i><span>${msg}</span>`; deck.appendChild(t);
-        requestAnimationFrame(() => t.classList.remove('translate-y-4', 'opacity-0'));
-        setTimeout(() => { t.classList.add('-translate-y-2', 'opacity-0'); setTimeout(() => t.remove(), 350); }, 3000);
-      }
-
-      render2DCatalogGrid(category = 'all', keyword = '') {
-        const grid = document.getElementById('catalog-2d-grid'); grid.innerHTML = '';
-        const term = keyword.toLowerCase().trim();
-        const filtered = NDB_STALLS.filter(s => (category === 'all' || s.category === category) && (!term || s.name.toLowerCase().includes(term) || s.description.toLowerCase().includes(term)));
-        document.getElementById('catalog-2d-counter').textContent = `Showing ${filtered.length} of ${NDB_STALLS.length} Pavilions`;
-        filtered.forEach(data => {
-          const isOnline = data.status === 'online';
-          const card = document.createElement('div'); card.className = 'glass-card rounded-2xl p-5 border border-white/10 hover:border-cyan-400/40 transition-all flex flex-col justify-between space-y-4';
-          card.innerHTML = `<div><div class="flex items-center justify-between mb-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">${data.category}</span><span class="flex items-center space-x-1.5 text-xs font-mono ${isOnline ? 'text-emerald-400' : 'text-slate-500'}"><span class="w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}"></span><span>${isOnline ? 'OPEN' : 'CLOSED'}</span></span></div><h3 class="text-lg font-bold text-white font-mono mb-0.5">${data.name}</h3><p class="text-xs text-slate-400 mb-2.5">Merchant: <span class="text-slate-200">${data.merchant}</span></p><p class="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-2">${data.description}</p><div class="space-y-1.5 border-t border-white/5 pt-3"><div class="text-[10px] uppercase font-mono text-slate-400">Featured Offerings:</div>${data.items.map(it => `<div class="flex items-center justify-between text-xs py-0.5"><span class="text-slate-300">${it.name}</span><span class="font-mono text-cyan-400 font-bold">${it.price}</span></div>`).join('')}</div><div class="flex items-center space-x-2 pt-2 border-t border-white/10"><a href="#/stall/${data.id}" class="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider font-mono transition-colors flex items-center justify-center space-x-1.5"><i class="fa-solid fa-cube"></i><span>Inspect Storefront</span></a></div>`;
-          grid.appendChild(card);
-        });
-      }
-
-      filter3DScene(category = 'all', keyword = '') {
-        const term = keyword.toLowerCase().trim(); let matchCount = 0;
-        this.stallsMap.forEach(obj => {
-          const matchCat = category === 'all' || obj.data.category === category;
-          const matchSearch = !term || obj.data.name.toLowerCase().includes(term) || obj.data.description.toLowerCase().includes(term);
-          const isMatch = matchCat && matchSearch; if (isMatch) matchCount++;
-          gsap.to(obj.group.scale, { x: isMatch ? 1 : 0.35, y: isMatch ? 1 : 0.35, z: isMatch ? 1 : 0.35, duration: 0.45, ease: "power2.out" });
-          if (obj.fixtureMat) gsap.to(obj.fixtureMat, { emissiveIntensity: isMatch ? (obj.data.status === 'online' ? 0.75 : 0.05) : 0.02, duration: 0.45 });
-        });
-      }
-
-      animate(now) {
-        if (!this.isWebGLRunning) return; this.animationFrameId = requestAnimationFrame(() => this.animate(performance.now()));
-        if (this.controls) { this.clampControlsBounds(); this.controls.update(); }
-        if (this.stallsMap && now) {
-          const sec = now * 0.001;
-          this.stallsMap.forEach(obj => {
-            if (obj !== this.hoveredStall && obj.data.status === 'online') {
-              const phase = obj.data.coords.x * 0.4 + obj.data.coords.z * 0.25;
-              const pulse = 0.85 + Math.sin(sec * 2.2 + phase) * 0.04;
-              obj.signMesh.material.emissiveIntensity = pulse;
-              if (obj.bladeSignMesh) obj.bladeSignMesh.material.emissiveIntensity = pulse;
-            }
-          });
-        }
-        if (this.renderer && this.scene && this.camera) this.renderer.render(this.scene, this.camera);
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => { window.NDB_APP = new Application3D(); });
-  </script>
+  <!-- 7. ARCHITECTURE SCRIPT (Modular Entry Point) -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
