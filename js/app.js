@@ -59,11 +59,28 @@ class App {
   }
 
   bindUI() {
-    // Navbar Get Started Button
-    const getStartedBtn = document.getElementById('navbar-get-started');
+    // Navbar Get Started Button (Clean Navbar Action)
+    const getStartedBtn = document.getElementById('btn-open-auth');
     if (getStartedBtn) {
       getStartedBtn.addEventListener('click', () => modalManager.open());
     }
+
+    // Category Filters Interactivity
+    const categoryPills = document.querySelectorAll('.cat-pill');
+    categoryPills.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        // Remove active class from all
+        categoryPills.forEach(p => p.classList.remove('active', 'bg-cyan-500', 'text-black', 'shadow-md', 'shadow-cyan-500/25'));
+        // Add active class to clicked
+        e.target.classList.add('active', 'bg-cyan-500', 'text-black', 'shadow-md', 'shadow-cyan-500/25');
+        const category = e.target.getAttribute('data-cat');
+        console.log("Filtering Stalls by Category:", category);
+        // Logic to filter stalls in 3D scene or 2D grid
+        if (this.stallsManager) {
+          // Example: this.stallsManager.filterCategory(category);
+        }
+      });
+    });
 
     // Window Resize
     window.addEventListener('resize', () => {
