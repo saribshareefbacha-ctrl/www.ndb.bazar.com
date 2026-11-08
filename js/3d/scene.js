@@ -2,7 +2,7 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
 
 export class SceneManager {
-  constructor(canvasId = 'webgl-canvas', containerId = 'canvas-container') {
+  constructor(canvasId = 'bg', containerId = 'webgl-container') {
     this.canvas = document.getElementById(canvasId);
     this.container = document.getElementById(containerId);
     this.renderer = null;
