@@ -47,21 +47,36 @@
     .sign-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); animation: shimmer 4s infinite linear; }
     @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
 
-    /* Unified Auth Modal */
-    #auth-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; background: rgba(5, 8, 20, 0.85); backdrop-filter: blur(12px); opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
+    /* Unified Auth Modal (Ultra-Modern Elite Glassmorphism) */
+    #auth-modal { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 100; padding: 1rem; background: rgba(9, 14, 26, 0.90); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); opacity: 0; pointer-events: none; transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     #auth-modal.modal-open { opacity: 1; pointer-events: auto; }
-    #auth-card { position: relative; width: 100%; max-width: 480px; background: rgba(10, 16, 32, 0.95); backdrop-filter: blur(30px); border: 1px solid rgba(0, 229, 255, 0.3); border-radius: 2rem; box-shadow: 0 0 80px rgba(0, 229, 255, 0.12), 0 32px 80px rgba(0,0,0,0.8); transform: scale(0.9) translateY(20px); transition: transform 0.35s cubic-bezier(0.34, 1.52, 0.64, 1), opacity 0.3s ease; opacity: 0; }
+    #auth-card { position: relative; width: 100%; max-width: 480px; background: rgba(15, 22, 38, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 2.5rem; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.05); transform: scale(0.92) translateY(24px); transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease; opacity: 0; }
     #auth-modal.modal-open #auth-card { transform: scale(1) translateY(0); opacity: 1; }
-    .auth-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; padding: 1rem 1.5rem; color: white; width: 100%; font-family: 'Outfit', sans-serif; font-size: 0.875rem; transition: all 0.2s; }
-    .auth-input:focus { outline: none; border-color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
-    .btn-auth { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-    .btn-google { background: #ffffff; color: #000; border: none; }
-    .btn-google:hover { background: #e0e0e0; }
-    .btn-standard { background: #00e5ff; color: #000; border: none; }
-    .btn-standard:hover { background: #00d0e8; }
-    .auth-divider { position: relative; margin: 1.5rem 0; }
-    .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.1); }
-    .auth-divider span { position: relative; background: #0a0e17; padding: 0 1rem; font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; }
+    
+    .auth-brand-mark { width: 48px; height: 48px; border-radius: 1rem; background: linear-gradient(135deg, #10b981 0%, #00e5ff 100%); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; font-size: 1.25rem; margin: 0 auto 1.5rem; box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.35); }
+
+    .auth-input { background: rgba(9, 14, 26, 0.60); border: 1px solid rgba(71, 85, 105, 0.80); border-radius: 1rem; padding: 1rem 1.5rem; color: #e2e8f0; width: 100%; font-family: 'Outfit', sans-serif; font-size: 0.875rem; transition: all 0.25s ease; }
+    .auth-input::placeholder { color: #64748b; }
+    .auth-input:focus { outline: none; border-color: rgba(16, 185, 129, 0.50); box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.50), 0 0 15px -5px rgba(16, 185, 129, 0.20); }
+    
+    .btn-primary { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: #f8fafc; color: #0f172a; border: none; }
+    .btn-primary:hover { background: #ffffff; transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.10); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-signup { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.10); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.30); }
+    .btn-signup:hover { background: rgba(16, 185, 129, 0.20); border-color: rgba(16, 185, 129, 0.50); transform: translateY(-1px); }
+    .btn-signup:active { transform: translateY(0); }
+
+    .btn-google { width: 100%; padding: 1rem; border-radius: 1rem; font-weight: 500; font-size: 0.875rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: rgba(255, 255, 255, 0.03); color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.10); }
+    .btn-google:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.20); }
+    .google-svg { width: 20px; height: 20px; }
+
+    .auth-divider { position: relative; margin: 2rem 0; }
+    .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(71, 85, 105, 0.40); }
+    .auth-divider span { position: relative; background: rgba(15, 22, 38, 0.95); padding: 0 1rem; font-size: 0.65rem; font-weight: 600; color: #64748b; letter-spacing: 0.05em; }
+
+    #auth-status { margin-top: 1.5rem; font-size: 0.65rem; font-weight: 500; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; }
+
 
     /* Owner Panel (Hidden by default) */
     #owner-panel { display: none; position: fixed; inset: 0; z-index: 110; background: rgba(5,8,20,0.95); backdrop-filter: blur(15px); padding: 2rem; overflow-y: auto; custom-scroll; }
@@ -85,35 +100,33 @@
   <!-- 1. UNIFIED AUTH MODAL -->
   <div id="auth-modal" class="modal-open">
     <div id="auth-card">
-      <div class="modal-accent-bar mb-6"></div>
       <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/30 mx-auto mb-4">
-          <i class="fa-solid fa-shop"></i>
+        <div class="auth-brand-mark">
+          <i class="fa-solid fa-shop text-black"></i>
         </div>
-        <h1 class="text-2xl font-extrabold text-white font-mono tracking-tight">Nankana Digital Bazaar</h1>
-        <p class="text-slate-400 text-xs font-mono mt-1">SwiftStack Unified Authentication</p>
+        <h1 class="text-xl font-semibold text-slate-100 tracking-tight">Nankana Digital Bazaar</h1>
+        <p class="text-slate-400 text-xs tracking-widest mt-1">Unified Security Interface</p>
       </div>
       
       <div class="space-y-4">
         <input type="email" id="auth-email" class="auth-input" placeholder="Corporate/Personal Email">
         <input type="password" id="auth-password" class="auth-input" placeholder="Secure Password" type="password">
-        <button id="btn-login-standard" class="btn-auth btn-standard">
-          <i class="fa-solid fa-key text-xs"></i> Sign In (Standard)
+        <button id="btn-login-standard" class="btn-primary">
+          <i class="fa-solid fa-key text-xs"></i> Sign In
         </button>
-        <button id="btn-signup-standard" class="btn-auth btn-standard" style="background: #10b981; color: #000;">
-          <i class="fa-solid fa-user-plus text-xs"></i> Sign Up (New Account)
+        <button id="btn-signup-standard" class="btn-signup">
+          <i class="fa-solid fa-user-plus text-xs"></i> Sign Up
         </button>
       </div>
 
-      <div class="auth-divider"><span>Or Direct Access</span></div>
+      <div class="auth-divider"><span>Direct Access</span></div>
 
-      <button id="btn-login-google" class="btn-auth btn-google">
-        <i class="fa-brands fa-google text-sm"></i> Firebase Google Direct Login
+      <button id="btn-login-google" class="btn-google">
+        <svg class="google-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l-6.85 6.85c-1.9-1.8-4.39-2.98-7.36-2.98-3.55 0-6.48 1.93-7.54 4.55h-7.84V9.5h13.38z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.44-4.55H24v9.08h12.71c-.58 2.99-2.46 5.63-5.17 7.36l6.85 6.85c4.01-3.71 6.34-9.01 6.34-15.34z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-3.01-.76-4.59s.28-3.14.76-4.59l-7.84-6.85C1.41 16.37 0 19.79 0 24.55s1.41 8.18 3.55 11.54l6.98-6.95z"/><path fill="#FBBC05" d="M24 44.75c2.97 0 5.68-.86 7.95-2.34l-6.85-6.85c-1.9 1.28-4.39 2.02-7.1 2.02-5.46 0-10.05-3.7-11.64-8.76h-7.84c1.59 5.06 6.18 8.76 11.64 8.76z"/><path fill="#34A853" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85 6.85c-1.9-1.8-4.39-2.98-7.36-2.98-3.55 0-6.48 1.93-7.54 4.55h-7.84V9.5h13.38z"/></svg>
+        Firebase Google Direct Login
       </button>
 
-      <div id="auth-status" class="text-center mt-6 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-        System Ready • Waiting for Authentication
-      </div>
+      <div id="auth-status" class="text-center">System Ready • Waiting for Authentication</div>
     </div>
   </div>
 
