@@ -64,8 +64,8 @@ canvas#webgl-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 
 .modal-accent-bar { height: 3px; width: 100%; background: linear-gradient(90deg, #00e5ff 0%, #2563eb 60%, transparent 100%); }
 
 /* FIXES: Ensure proper sizing and pointer events for 3D Viewport */
-#canvas-container { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; background: #0a0e17; transition-opacity: duration-500; pointer-events: auto; }
-#webgl-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; outline: none; }
+#webgl-container { position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 0; overflow: hidden; background: #0a0e17; transition-opacity: duration-500; pointer-events: auto; }
+#bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; outline: none; }
 
 #hud-tooltip { position: fixed; pointer-events: none; z-index: 30; -translate-x-1/2 -translate-y-full mb-4 opacity-0 transition-opacity duration-150; }
 #ui-overlay { position: relative; z-index: 10; width: 100%; height: 100%; pointer-events: none; flex-direction: column; justify-content: space-between; padding: 1rem; }

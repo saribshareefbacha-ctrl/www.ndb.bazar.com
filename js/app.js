@@ -133,8 +133,14 @@ class App {
   }
 }
 
-// Global Instance
-window.ndbApp = new App();
-window.ndbApp.init().catch(err => console.error("App Init Error:", err));
+// Global Instance & DOMContentLoaded Wrapper
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    window.ndbApp = new App();
+    window.ndbApp.init().catch(err => console.error("App Init Error:", err));
+  } catch (error) {
+    console.error("Critical App Initialization Error:", error);
+  }
+});
 
 export default window.ndbApp;
