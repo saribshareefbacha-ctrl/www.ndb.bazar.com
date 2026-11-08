@@ -20,6 +20,14 @@ export class SceneManager {
     this.setupScene();
     this.setupCamera();
     this.setupLighting();
+    
+    // FIX: Ensure the canvas is visible immediately by forcing a render
+    if (this.renderer && this.scene && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
+    
+    // Log initialization for debugging
+    console.log("SceneManager initialized: Canvas=", this.canvas ? 'Found' : 'Missing', "Renderer=", this.renderer ? 'Ready' : 'Missing');
   }
 
   setupRenderer() {
@@ -44,16 +52,24 @@ export class SceneManager {
     const aspect = window.innerWidth / window.innerHeight;
     const fov = aspect < 1 ? 48 : 38;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, 0.5, 105);
-    this.resetCamera(false);
+    
+    // FIX: Ensure camera looks at center and is positioned correctly immediately
+    this.camera.position.set(26, 15, 28);
+    this.camera.lookAt(0, 1.8, 0);
+    this.camera.updateProjectionMatrix();
   }
 
   resetCamera(animated = true, targetPos = { x: 26, y: 15, z: 28 }, targetLook = { x: 0, y: 1.8, z: 0 }) {
     if (!animated) {
       this.camera.position.set(targetPos.x, targetPos.y, targetPos.z);
+      this.camera.lookAt(targetLook.x, targetLook.y, targetLook.z);
+      this.camera.updateProjectionMatrix();
       return;
     }
     // Note: GSAP animation for camera position is handled in app.js or controls.js
     this.camera.position.set(targetPos.x, targetPos.y, targetPos.z);
+    this.camera.lookAt(targetLook.x, targetLook.y, targetLook.z);
+    this.camera.updateProjectionMatrix();
   }
 
   setupLighting() {

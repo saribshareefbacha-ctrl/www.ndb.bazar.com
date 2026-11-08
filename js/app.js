@@ -62,13 +62,18 @@ class App {
     // Navbar Get Started Button (Clean Navbar Action)
     const getStartedBtn = document.getElementById('btn-open-auth');
     if (getStartedBtn) {
-      getStartedBtn.addEventListener('click', () => modalManager.open());
+      getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log("Get Started clicked - Opening Modal");
+        modalManager.open();
+      });
     }
 
     // Category Filters Interactivity
     const categoryPills = document.querySelectorAll('.cat-pill');
     categoryPills.forEach(pill => {
       pill.addEventListener('click', (e) => {
+        e.preventDefault();
         // Remove active class from all
         categoryPills.forEach(p => p.classList.remove('active', 'bg-cyan-500', 'text-black', 'shadow-md', 'shadow-cyan-500/25'));
         // Add active class to clicked
@@ -86,7 +91,54 @@ class App {
     window.addEventListener('resize', () => {
       this.sceneManager?.onResize();
     });
+    
+    // Ensure modal buttons are bound (in case modalManager.init doesn't catch them early enough)
+    const btnGoogle = document.getElementById('btn-login-google');
+    if (btnGoogle) btnGoogle.addEventListener('click', () => { console.log("Google Login Triggered"); authService.handleGoogleLogin(); });
+    
+    const btnSignIn = document.getElementById('btn-login-standard');
+    if (btnSignIn) btnSignIn.addEventListener('click', () => {
+      const email = document.getElementById('auth-email').value;
+      const pass = document.getElementById('auth-password').value;
+      authService.handleStandardLogin(email, pass);
+    });
+
+    const btnSignUp = document.getElementById('btn-signup-standard');
+    if (btnSignUp) btnSignUp.addEventListener('click', () => {
+      const email = document.getElementById('signup-email').value;
+      const pass = document.getElementById('signup-password').value;
+      authService.handleStandardSignup(email, pass);
+    });
   }
+
+  animate() {
+    this.animationId = requestAnimationFrame(() => this.animate());
+    const delta = this.clock.getDelta();
+    
+    if (this.controlsManager) this.controlsManager.update();
+    if (this.stallsManager) this.stallsManager.update(delta);
+    if (this.sceneManager) this.sceneManager.render();
+  }
+
+  render2DCatalogGrid() {
+    // Triggered by rbacGuard
+    console.log("Rendering 2D Catalog Grid based on RBAC...");
+  }
+
+  destroy() {
+    cancelAnimationFrame(this.animationId);
+    this.controlsManager?.dispose();
+    this.stallsManager?.dispose();
+    if (this.sceneManager?.renderer) this.sceneManager.renderer.dispose();
+  }
+}
+
+// Global Instance
+window.ndbApp = new App();
+window.ndbApp.init().catch(err => console.error("App Init Error:", err));
+
+export default window.ndbApp;
+
 
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
