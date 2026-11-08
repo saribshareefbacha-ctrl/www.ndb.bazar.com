@@ -33,7 +33,7 @@ class App {
     // 3. Start Render Loop
     this.animate();
 
-    // 4. Bind UI Actions
+    // 4. Bind UI Actions (FIXED: Correct ID and Category Filters)
     this.bindUI();
 
     this.isInitialized = true;
@@ -82,7 +82,7 @@ class App {
         console.log("Filtering Stalls by Category:", category);
         // Logic to filter stalls in 3D scene or 2D grid
         if (this.stallsManager) {
-          // Example: this.stallsManager.filterCategory(category);
+          this.stallsManager.filterCategory(category);
         }
       });
     });
@@ -110,35 +110,6 @@ class App {
       authService.handleStandardSignup(email, pass);
     });
   }
-
-  animate() {
-    this.animationId = requestAnimationFrame(() => this.animate());
-    const delta = this.clock.getDelta();
-    
-    if (this.controlsManager) this.controlsManager.update();
-    if (this.stallsManager) this.stallsManager.update(delta);
-    if (this.sceneManager) this.sceneManager.render();
-  }
-
-  render2DCatalogGrid() {
-    // Triggered by rbacGuard
-    console.log("Rendering 2D Catalog Grid based on RBAC...");
-  }
-
-  destroy() {
-    cancelAnimationFrame(this.animationId);
-    this.controlsManager?.dispose();
-    this.stallsManager?.dispose();
-    if (this.sceneManager?.renderer) this.sceneManager.renderer.dispose();
-  }
-}
-
-// Global Instance
-window.ndbApp = new App();
-window.ndbApp.init().catch(err => console.error("App Init Error:", err));
-
-export default window.ndbApp;
-
 
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
