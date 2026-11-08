@@ -100,6 +100,9 @@
         <button id="btn-login-standard" class="btn-auth btn-standard">
           <i class="fa-solid fa-key text-xs"></i> Sign In (Standard)
         </button>
+        <button id="btn-signup-standard" class="btn-auth btn-standard" style="background: #10b981; color: #000;">
+          <i class="fa-solid fa-user-plus text-xs"></i> Sign Up (New Account)
+        </button>
       </div>
 
       <div class="auth-divider"><span>Or Direct Access</span></div>
@@ -285,12 +288,14 @@
       init() {
         const btnGoogle = document.getElementById('btn-login-google');
         const btnStandard = document.getElementById('btn-login-standard');
+        const btnSignup = document.getElementById('btn-signup-standard');
         const authModal = document.getElementById('auth-modal');
         const ownerPanel = document.getElementById('owner-panel');
         const btnCloseOwner = document.getElementById('btn-close-owner');
 
         btnGoogle.addEventListener('click', () => this.handleGoogleLogin());
         btnStandard.addEventListener('click', () => this.handleStandardLogin());
+        btnSignup.addEventListener('click', () => this.handleStandardSignup());
         btnCloseOwner.addEventListener('click', () => ownerPanel.classList.remove('active'));
 
         // Firebase Auth Listeners (Mocked for logic demonstration)
@@ -309,6 +314,15 @@
         const email = document.getElementById('auth-email').value;
         const pass = document.getElementById('auth-password').value;
         // Logic: firebase.auth().signInWithEmailAndPassword(email, pass)
+        this.mockLoginSuccess(email);
+      }
+
+      async handleStandardSignup() {
+        const email = document.getElementById('auth-email').value;
+        const pass = document.getElementById('auth-password').value;
+        // Logic: firebase.auth().createUserWithEmailAndPassword(email, pass)
+        this.app.showToast(`SIGNUP INITIATED: ${email}`);
+        // Mocking success for demonstration
         this.mockLoginSuccess(email);
       }
 
